@@ -1,0 +1,9 @@
+<section class="ts-adr ts-adr--{{status}}">
+  <header class="ts-adr__header">
+    {{#id}}<span class="ts-adr__id">{{id}}</span>{{/id}}
+    <p class="ts-adr__title">{{title}}</p>
+    <span class="ts-adr__status" data-status="{{status}}"></span>
+  </header>
+  {{#date}}<p class="ts-adr__date">{{#docLang=de}}Entschieden am{{/docLang=de}}{{#docLang=en}}Decided on{{/docLang=en}} {{date}}</p>{{/date}}
+  <div class="ts-adr__body">{{{children}}}</div>
+</section>

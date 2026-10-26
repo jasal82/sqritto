@@ -1,0 +1,108 @@
+---
+title: Komponenten-Test
+description: Alle eingebauten Elemente in einem Dokument.
+---
+
+# Willkommen bei {% $produkt %}
+
+Dieses Dokument nutzt **fett**, *kursiv*, ~~durchgestrichen~~, `inline code` und einen [Link](https://typst.app). Sonderzeichen: 5 $, #hash, @mention, <tag>, a_b, 50 % und C:\Pfad\zur\Datei sowie // Kommentar.
+
+1. Erstens
+2. Zweitens mit **Fett**
+   - verschachtelt
+   - noch eins
+3. Drittens
+
+- [x] Erledigt
+- [ ] Offen
+
+## Hinweise
+
+{% callout type="warning" title="Achtung" %}
+Ein wichtiger Hinweis mit `Code`.
+{% /callout %}
+
+> [!TIP]
+> GitHub-Hinweise werden ebenfalls unterstützt.
+
+> Ein normales Zitat.
+
+## Struktur
+
+{% details title="Mehr erfahren" %}
+Versteckter Inhalt mit einer Liste:
+
+- A
+- B
+{% /details %}
+
+{% tabs group="os" %}
+{% tab label="Windows" %}
+```powershell
+winget install sqritto
+```
+{% /tab %}
+{% tab label="Linux" %}
+```bash {% title="install.sh" lines=true %}
+curl -fsSL https://example.com/install.sh | sh
+echo fertig
+```
+{% /tab %}
+{% /tabs %}
+
+{% steps %}
+{% step title="Herunterladen" %}
+Lade das Paket herunter.
+{% /step %}
+{% step title="Installieren" %}
+Führe den Installer aus.
+{% /step %}
+{% /steps %}
+
+{% cards columns=2 %}
+{% card title="Zweite Seite" href="zweite.mdoc" %}
+Springt zur zweiten Seite.
+{% /card %}
+{% card title="Extern" href="https://example.com" %}
+Ein externer Verweis.
+{% /card %}
+{% /cards %}
+
+## Inline
+
+Status: {% badge color="green" %}Stabil{% /badge %} – drücke {% kbd keys="Strg+Umschalt+P" /%} und beachte die Formel {% math formula="a^2 + b^2 = c^2" /%}.{% footnote %}Eine Fußnote mit *Betonung*.{% /footnote %}
+
+```math
+integral_0^infinity e^(-x^2) dif x = sqrt(pi) / 2
+```
+
+## Tabellen und Bilder
+
+| Spalte | Rechts | Mitte |
+|:-------|-------:|:-----:|
+| a      | 1      | x     |
+| b **fett** | 2  | y     |
+
+![Ein Pixel](../assets/pixel.png "Abbildung eines Pixels")
+
+{% figure src="/assets/pixel.png" caption="Komponente figure" width="20%" /%}
+
+## Architektur und API
+
+{% decision id="ADR-001" title="Wir verwenden Typst" status="accepted" date="25.10.2026" %}
+**Kontext:** PDF-Ausgabe in hoher Qualität.
+{% /decision %}
+
+{% endpoint method="POST" path="/api/v1/dokumente" %}
+Legt ein neues Dokument an.
+{% /endpoint %}
+
+```typst {% render=true %}
+#rect(width: 3cm, fill: blue.lighten(80%))[Typst direkt]
+```
+
+---
+
+{% pagebreak /%}
+
+Siehe auch [Unterabschnitt](zweite.mdoc#unterabschnitt).

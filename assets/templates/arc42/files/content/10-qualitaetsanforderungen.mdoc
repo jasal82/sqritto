@@ -1,0 +1,32 @@
+---
+title: Qualitätsanforderungen
+---
+
+# Qualitätsanforderungen
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Konkretisieren Sie die Qualitätsziele aus Kapitel 1 mit einem Qualitätsbaum und überprüfbaren *Qualitätsszenarien*: Auslöser, Umgebung, erwartete Reaktion und Messgröße.
+{% /callout %}
+
+## Qualitätsbaum
+
+- **Verfügbarkeit**
+  - Ausfallsicherheit der Disposition
+  - Wiederanlauf nach Störungen
+- **Bedienbarkeit**
+  - Bedienung der App während der Tour
+  - Offline-Fähigkeit
+- **Änderbarkeit**
+  - Anbindung neuer Telematik-Anbieter
+- **Datenschutz**
+  - Löschung und Anonymisierung
+
+## Qualitätsszenarien
+
+| ID | Szenario | Messgröße |
+|:---|:---|:---|
+| Q1 | Ein Knoten des Clusters fällt während der Hauptplanungszeit aus. | Keine Unterbrechung für die Disposition |
+| Q2 | Die Telematik ist zwei Stunden nicht erreichbar. | Tourplanung uneingeschränkt nutzbar |
+| Q3 | Fahrpersonal bestätigt eine Zustellung ohne Netz. | Erfassung in unter 10 Sekunden, Übertragung bei Verbindung |
+| Q4 | Ein neuer Telematik-Anbieter wird angebunden. | Aufwand höchstens 10 Personentage |
+| Q5 | Eine Löschanfrage nach Art. 17 DSGVO geht ein. | Umsetzung innerhalb von 14 Tagen, protokolliert |

@@ -1,0 +1,24 @@
+{
+  "name": "cards",
+  "title": "Kartenraster",
+  "description": "Raster aus Karten, z. B. als Einstiegsseite mit Verweisen auf Kapitel.",
+  "category": "Struktur",
+  "attributes": {
+    "columns": {
+      "type": "Number",
+      "default": 2,
+      "description": "Spaltenanzahl (1–4)"
+    }
+  },
+  "snippet": "{% cards columns=2 %}\n{% card title=\"${Titel}\" href=\"${seite.mdoc}\" %}\nKurzbeschreibung\n{% /card %}\n{% card title=\"Titel\" %}\nKurzbeschreibung\n{% /card %}\n{% /cards %}",
+  "collect": "card",
+  "en": {
+    "title": "Card grid",
+    "description": "Grid of cards, e.g. for a landing page with links to chapters.",
+    "category": "Structure",
+    "snippet": "{% cards columns=2 %}\n{% card title=\"${Title}\" href=\"${page.mdoc}\" %}\nShort description\n{% /card %}\n{% card title=\"Title\" %}\nShort description\n{% /card %}\n{% /cards %}",
+    "attributes": {
+      "columns": "Number of columns (1–4)"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+[package]
+name = "brief"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Sqritto"]
+license = "MIT-0"
+description = "Geschäftsbrief nach DIN 5008 (Form A und B) mit Falz- und Lochmarken, Informationsblock und Geschäftsangaben."

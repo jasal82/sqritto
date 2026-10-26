@@ -1,0 +1,38 @@
+---
+title: Building block view
+---
+
+# Building block view
+
+{% callout type="info" title="About this chapter" %}
+The building block view shows the static decomposition of the system into building blocks and their relationships – top-down, level by level. For each building block, describe its purpose and interfaces ("black box").
+{% /callout %}
+
+## Level 1
+
+| Building block | Responsibility |
+|:---|:---|
+| Route planning | Creates and optimizes routes, manages orders |
+| Live view | Combines positions and status into a real-time picture |
+| Telematics gateway | Normalizes data from different telematics providers |
+| Maintenance | Schedules maintenance, exchanges appointments with the workshop portal |
+| Analytics | Calculates key figures and costs per vehicle and route |
+| App backend | Provides routes to the mobile app and receives status updates |
+
+## Level 2: Telematics gateway
+
+The gateway wraps each provider in its own adapter. All adapters emit events in the common `VehiclePositionReported` format.
+
+```json {% title="Event VehiclePositionReported" %}
+{
+  "vehicleId": "TRK-0417",
+  "timestamp": "2026-10-25T07:42:13Z",
+  "position": { "lat": 51.9225, "lon": 4.4792 },
+  "speedKmh": 42,
+  "source": "telematics-a"
+}
+```
+
+{% callout type="tip" %}
+A new provider only requires one more adapter. All other building blocks remain unchanged.
+{% /callout %}

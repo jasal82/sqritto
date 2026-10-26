@@ -1,0 +1,26 @@
+---
+title: Deployment view
+---
+
+# Deployment view
+
+{% callout type="info" title="About this chapter" %}
+The deployment view describes the technical infrastructure and how the building blocks are mapped onto it: environments, data centers, nodes and networks.
+{% /callout %}
+
+## Infrastructure
+
+| Node | Contents | Configuration |
+|:---|:---|:---|
+| AKS cluster "prod-weu" | All {% $system %} services | 3 nodes, zone-redundant |
+| Azure Database for PostgreSQL | Data per service (separate schemas) | High availability, 35-day backups |
+| Event Hubs (Kafka API) | Events between services | 4 partitions per topic |
+| App stores | Mobile app | Distributed via MDM |
+
+## Environments
+
+| Environment | Purpose | Data |
+|:---|:---|:---|
+| Development | Integration of every change | Synthetic |
+| Staging | Acceptance testing with dispatch | Anonymized copy |
+| Production | Live operation | Real |

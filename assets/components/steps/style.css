@@ -1,0 +1,43 @@
+.ts-steps {
+  counter-reset: ts-step;
+  margin: 1.5rem 0;
+  padding: 0;
+  list-style: none;
+}
+.ts-step {
+  position: relative;
+  counter-increment: ts-step;
+  margin: 0 !important;
+  padding: 0 0 1.4rem 2.75rem;
+}
+.ts-step::before {
+  content: counter(ts-step);
+  position: absolute;
+  top: -.05rem;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border: 1px solid var(--ts-border-strong);
+  border-radius: 999px;
+  background: var(--ts-bg);
+  color: var(--ts-heading);
+  font-size: .82rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+.ts-step::after {
+  content: "";
+  position: absolute;
+  top: 2.05rem;
+  bottom: .2rem;
+  left: .92rem;
+  width: 1px;
+  background: var(--ts-border);
+}
+.ts-step:last-child { padding-bottom: 0; }
+.ts-step:last-child::after { display: none; }
+.ts-step__title { margin: 0 0 .35rem !important; font-weight: 600; color: var(--ts-heading); line-height: 1.6; }
+.ts-step__body > :first-child { margin-top: 0; }
+.ts-step__body > :last-child { margin-bottom: 0; }

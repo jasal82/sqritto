@@ -1,0 +1,22 @@
+{
+  "name": "card",
+  "title": "Karte",
+  "description": "Eine Karte innerhalb von `cards`, optional mit Verweis.",
+  "category": "Struktur",
+  "parents": ["cards"],
+  "attributes": {
+    "title": { "type": "String", "required": true, "description": "Überschrift" },
+    "href": { "type": "String", "link": true, "description": "Verweisziel (Seite, Anker oder URL)" }
+  },
+  "snippet": "{% card title=\"${Titel}\" href=\"${seite.mdoc}\" %}\n${Beschreibung}\n{% /card %}",
+  "en": {
+    "title": "Card",
+    "description": "A card inside `cards`, optionally with a link.",
+    "category": "Structure",
+    "snippet": "{% card title=\"${Title}\" href=\"${page.mdoc}\" %}\n${Description}\n{% /card %}",
+    "attributes": {
+      "title": "Heading",
+      "href": "Link target (page, anchor or URL)"
+    }
+  }
+}

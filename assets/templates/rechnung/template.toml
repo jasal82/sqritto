@@ -1,0 +1,12 @@
+[template]
+name = "Rechnung"
+description = "Rechnung im DIN-5008-Layout – Netto, Umsatzsteuer und Gesamtbetrag werden automatisch berechnet."
+category = "Geschäftlich"
+kind = "typst"
+outputs = ["pdf"]
+order = 10
+
+[template.en]
+name = "Invoice (German format)"
+description = "German invoice in DIN 5008 layout – net amount, VAT and total are calculated automatically. Content and labels are in German."
+category = "Business"

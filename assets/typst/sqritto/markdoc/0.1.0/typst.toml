@@ -1,0 +1,7 @@
+[package]
+name = "markdoc"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Sqritto"]
+license = "MIT-0"
+description = "Basisbibliothek für aus Markdoc erzeugte Typst-Dokumente: Theme, Blöcke und Standard-Layout."

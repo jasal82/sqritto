@@ -1,0 +1,12 @@
+[template]
+name = "Leeres Typst-Dokument"
+description = "Eine Typst-Datei mit sinnvollen Grundeinstellungen – volle Kontrolle über das Layout."
+category = "Leer"
+kind = "typst"
+outputs = ["pdf"]
+order = 20
+
+[template.en]
+name = "Blank Typst document"
+description = "A single Typst file with sensible defaults – full control over the layout."
+category = "Blank"

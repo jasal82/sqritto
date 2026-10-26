@@ -1,0 +1,44 @@
+---
+title: Welcome
+description: Getting started with the Nimbus Sync documentation.
+---
+
+# Welcome
+
+**{% $product %}** keeps files in sync across workstations, servers and cloud storage – encrypted, versioned and entirely under your control. This guide covers installing, configuring and running version {% $product_version %}.
+
+{% callout type="tip" title="Quick start" %}
+Want to try {% $product %} first? Follow the [installation guide](installation.mdoc) – about five minutes later, your first folder is in sync.
+{% /callout %}
+
+## What you'll find here
+
+{% cards columns=2 %}
+{% card title="Overview" href="overview.mdoc" %}
+Architecture, building blocks and key terms at a glance.
+{% /card %}
+{% card title="Installation" href="installation.mdoc" %}
+Step by step on Windows, macOS and Linux.
+{% /card %}
+{% card title="Configuration" href="configuration.mdoc" %}
+Every option in `nimbus.yaml`, explained.
+{% /card %}
+{% card title="REST API" href="api.mdoc" %}
+Endpoints, authentication and examples.
+{% /card %}
+{% /cards %}
+
+## Who this guide is for
+
+This guide is written for administrators who roll out and operate {% $product %} across an organization. It assumes a basic understanding of networking and some familiarity with the command line.
+
+## Conventions
+
+| Style | Meaning |
+|---|---|
+| `nimbus status` | Commands, file names and configuration values |
+| {% kbd keys="Ctrl+Shift+S" /%} | Keyboard shortcuts |
+| {% badge color="green" %}Stable{% /badge %} {% badge color="yellow" %}Preview{% /badge %} | Maturity of a feature |
+| *Italics* | Terms explained in the [glossary](faq.mdoc#glossary) |
+
+{% partial file="partials/support.mdoc" /%}

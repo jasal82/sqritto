@@ -1,0 +1,15 @@
+[document]
+title = "{{title}}"
+kind = "typst"
+template = "leer-typst"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+
+[typst]
+entry = "main.typ"
+
+[pdf]
+enabled = true
+
+[html]
+enabled = false

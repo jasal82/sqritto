@@ -1,0 +1,34 @@
+[document]
+title = "{{title}}"
+subtitle = "Projekt FlottenPilot – Architektur-Jour-fixe"
+kind = "markdoc"
+template = "protokoll"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+date = "{{date}}"
+description = "Ergebnisprotokoll einer Besprechung."
+
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+pages = ["index.mdoc"]
+
+[variables]
+termin = "{{date}}, 10:00–11:30 Uhr"
+ort = "Raum Elbe / Videokonferenz"
+
+[pdf]
+enabled = true
+template = "@sqritto/report:0.1.0"
+
+[pdf.options]
+doctype = "Besprechungsprotokoll"
+serif = false
+numbering = false
+accent = "#0f766e"
+
+[html]
+enabled = true
+accent = "#0f766e"
+include_pdf = true

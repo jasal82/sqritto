@@ -1,0 +1,27 @@
+[document]
+title = "{{title}}"
+kind = "markdoc"
+template = "leer-markdoc"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+pages = ["index.mdoc"]
+
+[variables]
+
+[pdf]
+enabled = true
+template = "@sqritto/techdoc:0.1.0"
+
+[pdf.options]
+cover = false
+toc = false
+numbering = false
+
+[html]
+enabled = true
+include_pdf = true

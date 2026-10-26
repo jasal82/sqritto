@@ -1,0 +1,30 @@
+---
+title: Runtime view
+---
+
+# Runtime view
+
+{% callout type="info" title="About this chapter" %}
+Use a few important scenarios to show how the building blocks interact at runtime – for example core workflows, failure cases or system startup.
+{% /callout %}
+
+## Completing a delivery (offline)
+
+{% steps %}
+{% step title="Load the route" %}
+Before setting off, the app downloads the route from the app backend and stores it locally.
+{% /step %}
+{% step title="Record the delivery" %}
+The driver confirms the delivery with a signature and a photo – even without mobile reception.
+{% /step %}
+{% step title="Synchronize" %}
+As soon as a connection is available, the app sends all updates in the correct order. The app backend publishes the `DeliveryCompleted` event.
+{% /step %}
+{% step title="Update the live view" %}
+The live view processes the event and refreshes the dispatch screen within two seconds.
+{% /step %}
+{% /steps %}
+
+{% details title="Failure case: duplicate messages" %}
+Every message carries a unique ID. The app backend discards duplicates, so repeated transmissions are harmless (idempotent processing).
+{% /details %}

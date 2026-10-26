@@ -1,0 +1,5 @@
+.ts-math svg { overflow: visible; }
+.ts-math--inline { display: inline-block; vertical-align: middle; line-height: 0; }
+.ts-math--inline svg { height: auto; max-height: 1.6em; width: auto; vertical-align: middle; }
+.ts-math--block { display: flex; justify-content: center; margin: 1.4rem 0; overflow-x: auto; }
+.ts-math--block svg { max-width: 100%; height: auto; }

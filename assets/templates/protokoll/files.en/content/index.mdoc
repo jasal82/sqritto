@@ -1,0 +1,52 @@
+---
+title: Meeting minutes
+description: Minutes of the FleetPilot architecture review.
+---
+
+# Meeting details
+
+- **Date and time:** {% $when %}
+- **Location:** {% $location %}
+- **Chair:** James Walker
+- **Minutes:** {% join($document.authors, ", ") %}
+
+## Attendees
+
+| Name | Role | Present |
+|:---|:---|:---:|
+| Dr. Sarah Chen | Head of IT Architecture | yes |
+| James Walker | Product Owner | yes |
+| Priya Patel | Developer, Dispatch team | yes |
+| Tom Becker | IT Operations | apologies |
+
+# Agenda
+
+1. Status of the telematics integration
+2. Decision on route optimization
+3. Any other business
+
+## Item 1 – Status of the telematics integration
+
+The adapter for the first provider has been running reliably in the staging environment for two weeks. Data quality is good; position reports are occasionally missing in tunnels, which is not a problem from a business perspective.
+
+## Item 2 – Decision on route optimization
+
+The group discussed building a dedicated optimization service versus extending the existing map service. Computation times for more than 500 stops have not yet been measured reliably.
+
+{% callout type="success" title="Decision" %}
+The dedicated optimization service will be built as a prototype. The final decision will be made at the next meeting, after the load test.
+{% /callout %}
+
+## Item 3 – Any other business
+
+The staging environment will be unavailable on November 3 due to maintenance.
+
+# Action items
+
+- [ ] Prepare a load test of route optimization with production data – *Priya Patel*, by Nov 7
+- [ ] Announce the maintenance window to all teams – *Tom Becker*, by Oct 30
+- [x] Circulate the minutes – *{% join($document.authors, ", ") %}*
+
+# Next meeting
+
+The next meeting will take place in two weeks at the same time.

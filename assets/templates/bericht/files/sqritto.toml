@@ -1,0 +1,32 @@
+[document]
+title = "{{title}}"
+subtitle = "Wie Docs as Code die Dokumentation im Mittelstand verändert"
+kind = "markdoc"
+template = "bericht"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+description = "Whitepaper mit Zusammenfassung und Handlungsempfehlungen."
+
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+pages = ["index.mdoc", "ausgangslage.mdoc", "empfehlungen.mdoc"]
+
+[variables]
+studie = "Dokumentationsumfrage 2026"
+
+[pdf]
+enabled = true
+template = "@sqritto/report:0.1.0"
+
+[pdf.options]
+accent = "#b45309"
+abstract = "Technische Dokumentation veraltet schneller, als sie geschrieben wird. Dieser Bericht zeigt, wie Unternehmen mit Docs as Code – Dokumentation im selben Werkzeugkasten wie Software – Aktualität, Qualität und Auffindbarkeit verbessern, und gibt fünf konkrete Empfehlungen für den Einstieg."
+toc = false
+numbering = true
+
+[html]
+enabled = true
+accent = "#b45309"
+include_pdf = true

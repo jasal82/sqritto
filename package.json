@@ -1,0 +1,13 @@
+{
+  "name": "sqritto-workspace",
+  "private": true,
+  "license": "Apache-2.0",
+  "workspaces": ["engine", "site", "web"],
+  "scripts": {
+    "build": "npm run build -w engine && npm run build -w site && npm run build -w web",
+    "test": "npm test -w engine",
+    "typecheck": "npm run typecheck -w site && npm run typecheck -w web",
+    "i18n": "node web/scripts/i18n-check.mjs",
+    "dev": "npm run dev -w web"
+  }
+}

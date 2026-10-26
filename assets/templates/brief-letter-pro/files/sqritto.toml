@@ -1,0 +1,16 @@
+[document]
+title = "{{title}}"
+kind = "typst"
+template = "brief-letter-pro"
+authors = ["{{author}}"]
+lang = "de"
+description = "Brief auf Basis von @preview/letter-pro (Typst Universe)."
+
+[typst]
+entry = "main.typ"
+
+[pdf]
+enabled = true
+
+[html]
+enabled = false

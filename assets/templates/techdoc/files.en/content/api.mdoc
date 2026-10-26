@@ -1,0 +1,76 @@
+---
+title: REST API
+description: Endpoints and examples for the Nimbus REST API.
+---
+
+# REST API
+
+The REST API lets you automate the management of folders, shares and devices. All endpoints are located under `https://sync.example.com/api/v1` and accept and return JSON. {% badge color="green" %}Stable{% /badge %}
+
+## Authentication
+
+Every request needs an access token in the `Authorization` header. You can create tokens in the web console under **Settings › API access**.
+
+```http
+Authorization: Bearer nmb_live_2f9c…
+```
+
+## Folders
+
+{% endpoint method="GET" path="/api/v1/folders" %}
+Returns all folders the token has access to. Supports the parameters `limit` (default 50) and `cursor` for pagination.
+{% /endpoint %}
+
+{% endpoint method="POST" path="/api/v1/folders" %}
+Creates a new folder. The `name` field is required.
+{% /endpoint %}
+
+{% tabs group="language" %}
+{% tab label="curl" %}
+```bash
+curl -X POST https://sync.example.com/api/v1/folders \
+  -H "Authorization: Bearer $NIMBUS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Project Aurora"}'
+```
+{% /tab %}
+{% tab label="JavaScript" %}
+```js
+const res = await fetch('https://sync.example.com/api/v1/folders', {
+  method: 'POST',
+  headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name: 'Project Aurora' }),
+});
+const folder = await res.json();
+```
+{% /tab %}
+{% tab label="Python" %}
+```python
+import requests
+
+folder = requests.post(
+    "https://sync.example.com/api/v1/folders",
+    headers={"Authorization": f"Bearer {token}"},
+    json={"name": "Project Aurora"},
+).json()
+```
+{% /tab %}
+{% /tabs %}
+
+{% endpoint method="DELETE" path="/api/v1/folders/{id}" %}
+Moves a folder to the trash. It is permanently deleted after 30 days. {% badge color="yellow" %}Preview{% /badge %}
+{% /endpoint %}
+
+## Status codes
+
+| Code | Meaning |
+|:---:|:---|
+| `200` | Request succeeded |
+| `201` | Resource created |
+| `401` | Token missing or invalid |
+| `403` | No permission for this resource |
+| `429` | Too many requests – see the `Retry-After` header |
+
+{% callout type="info" %}
+The API allows 600 requests per minute per token. For bulk operations, use the `/api/v1/batch` endpoint.
+{% /callout %}

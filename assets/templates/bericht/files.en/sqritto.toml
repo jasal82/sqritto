@@ -1,0 +1,32 @@
+[document]
+title = "{{title}}"
+subtitle = "How docs as code is changing documentation at mid-sized companies"
+kind = "markdoc"
+template = "bericht"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+description = "White paper with executive summary and recommendations."
+
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+pages = ["index.mdoc", "current-state.mdoc", "recommendations.mdoc"]
+
+[variables]
+survey = "Documentation Survey 2026"
+
+[pdf]
+enabled = true
+template = "@sqritto/report:0.1.0"
+
+[pdf.options]
+accent = "#b45309"
+abstract = "Technical documentation goes out of date faster than it can be written. This report shows how companies use docs as code – documentation built with the same toolbox as software – to keep their documentation current, raise its quality and make it easier to find. It closes with five concrete recommendations for getting started."
+toc = false
+numbering = true
+
+[html]
+enabled = true
+accent = "#b45309"
+include_pdf = true

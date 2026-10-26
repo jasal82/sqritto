@@ -1,0 +1,76 @@
+---
+title: REST-API
+description: Endpunkte und Beispiele der Nimbus-REST-API.
+---
+
+# REST-API
+
+Über die REST-API lassen sich Ordner, Freigaben und Geräte automatisiert verwalten. Alle Endpunkte liegen unter `https://sync.example.com/api/v1` und erwarten und liefern JSON. {% badge color="green" %}Stabil{% /badge %}
+
+## Authentifizierung
+
+Jede Anfrage benötigt ein Zugriffstoken im Header `Authorization`. Tokens erstellen Sie in der Weboberfläche unter **Einstellungen › API-Zugriff**.
+
+```http
+Authorization: Bearer nmb_live_2f9c…
+```
+
+## Ordner
+
+{% endpoint method="GET" path="/api/v1/folders" %}
+Liefert alle Ordner, auf die das Token Zugriff hat. Unterstützt die Parameter `limit` (Standard 50) und `cursor` für die Seitenweise Abfrage.
+{% /endpoint %}
+
+{% endpoint method="POST" path="/api/v1/folders" %}
+Legt einen neuen Ordner an. Pflichtfeld ist `name`.
+{% /endpoint %}
+
+{% tabs group="sprache" %}
+{% tab label="curl" %}
+```bash
+curl -X POST https://sync.example.com/api/v1/folders \
+  -H "Authorization: Bearer $NIMBUS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Projekt Aurora"}'
+```
+{% /tab %}
+{% tab label="JavaScript" %}
+```js
+const res = await fetch('https://sync.example.com/api/v1/folders', {
+  method: 'POST',
+  headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name: 'Projekt Aurora' }),
+});
+const folder = await res.json();
+```
+{% /tab %}
+{% tab label="Python" %}
+```python
+import requests
+
+folder = requests.post(
+    "https://sync.example.com/api/v1/folders",
+    headers={"Authorization": f"Bearer {token}"},
+    json={"name": "Projekt Aurora"},
+).json()
+```
+{% /tab %}
+{% /tabs %}
+
+{% endpoint method="DELETE" path="/api/v1/folders/{id}" %}
+Verschiebt einen Ordner in den Papierkorb. Nach 30 Tagen wird er endgültig gelöscht. {% badge color="yellow" %}Vorschau{% /badge %}
+{% /endpoint %}
+
+## Statuscodes
+
+| Code | Bedeutung |
+|:---:|:---|
+| `200` | Anfrage erfolgreich |
+| `201` | Ressource angelegt |
+| `401` | Token fehlt oder ist ungültig |
+| `403` | Keine Berechtigung für diese Ressource |
+| `429` | Zu viele Anfragen – siehe Header `Retry-After` |
+
+{% callout type="info" %}
+Die API erlaubt 600 Anfragen pro Minute und Token. Für Massenoperationen empfiehlt sich der Endpunkt `/api/v1/batch`.
+{% /callout %}

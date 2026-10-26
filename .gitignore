@@ -1,0 +1,13 @@
+/target
+node_modules/
+engine/dist/
+site/dist/
+web/dist/
+*.log
+.DS_Store
+
+# Build-Ergebnisse von build.cmd / build.sh
+/dist/
+
+# Lokale Werkzeugeinstellungen
+/.claude/

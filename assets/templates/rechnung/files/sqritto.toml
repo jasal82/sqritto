@@ -1,0 +1,16 @@
+[document]
+title = "{{title}}"
+kind = "typst"
+template = "rechnung"
+authors = ["{{author}}"]
+lang = "de"
+description = "Rechnung mit automatischer Summenberechnung."
+
+[typst]
+entry = "main.typ"
+
+[pdf]
+enabled = true
+
+[html]
+enabled = false

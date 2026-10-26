@@ -1,0 +1,30 @@
+---
+title: Context and scope
+---
+
+# Context and scope
+
+{% callout type="info" title="About this chapter" %}
+Delimit the system from its environment: who uses it, and which data does it exchange with which neighboring systems? The business context shows the content of these exchanges, the technical context the channels and protocols.
+{% /callout %}
+
+## Business context
+
+{% figure src="../assets/context.svg" caption="Business context of FleetPilot" alt="FleetPilot in the center, connected to dispatch, drivers, the ERP system, telematics and the workshop portal." /%}
+
+| Partner | Input | Output |
+|:---|:---|:---|
+| Dispatch | Orders, route planning | Route plans, live view |
+| Drivers | Delivery status, photos, signatures | Route, navigation |
+| ERP system | Master data, cost centers | Costs per route |
+| Telematics | Positions, vehicle data | – |
+| Workshop portal | Appointment confirmations | Maintenance orders |
+
+## Technical context
+
+| Partner | Channel | Format | Frequency |
+|:---|:---|:---|:---|
+| ERP system | Integration platform (Kafka) | Avro | Event-driven |
+| Telematics | HTTPS webhook | JSON | Every 30 seconds per vehicle |
+| Workshop portal | REST | JSON | On demand |
+| Mobile app | HTTPS, WebSocket | JSON | Permanently connected |

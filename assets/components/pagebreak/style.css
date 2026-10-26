@@ -1,0 +1,2 @@
+.ts-pagebreak { display: none; }
+@media print { .ts-pagebreak { display: block; break-after: page; } }

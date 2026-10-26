@@ -1,0 +1,30 @@
+{
+  "name": "decision",
+  "title": "Architekturentscheidung",
+  "description": "Architecture Decision Record (ADR) mit Status, Datum und Begründung – passend zu arc42 Kapitel 9.",
+  "category": "Architektur",
+  "attributes": {
+    "id": { "type": "String", "description": "Kennung, z. B. ADR-001" },
+    "title": { "type": "String", "required": true, "description": "Entscheidung in einem Satz" },
+    "status": {
+      "type": "String",
+      "default": "proposed",
+      "matches": ["proposed", "accepted", "rejected", "deprecated", "superseded"],
+      "description": "Status"
+    },
+    "date": { "type": "String", "description": "Datum der Entscheidung" }
+  },
+  "snippet": "{% decision id=\"${ADR-001}\" title=\"${Entscheidung}\" status=\"accepted\" date=today() %}\n**Kontext:** …\n\n**Entscheidung:** …\n\n**Konsequenzen:** …\n{% /decision %}",
+  "en": {
+    "title": "Architecture decision",
+    "description": "Architecture Decision Record (ADR) with status, date and rationale – matches arc42 section 9.",
+    "category": "Architecture",
+    "snippet": "{% decision id=\"${ADR-001}\" title=\"${Decision}\" status=\"accepted\" date=today() %}\n**Context:** …\n\n**Decision:** …\n\n**Consequences:** …\n{% /decision %}",
+    "attributes": {
+      "id": "Identifier, e.g. ADR-001",
+      "title": "The decision in one sentence",
+      "status": "Status",
+      "date": "Date of the decision"
+    }
+  }
+}

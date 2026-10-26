@@ -1,0 +1,12 @@
+[template]
+name = "Technische Dokumentation"
+description = "Mehrseitiges Handbuch mit Titelseite, Inhaltsverzeichnis, Komponenten und durchsuchbarer HTML-Site."
+category = "Dokumentation"
+kind = "markdoc"
+outputs = ["pdf", "html"]
+order = 10
+
+[template.en]
+name = "Technical documentation"
+description = "Multi-page manual with cover page, table of contents, components and a searchable HTML site."
+category = "Documentation"

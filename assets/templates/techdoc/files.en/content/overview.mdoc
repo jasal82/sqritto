@@ -1,0 +1,41 @@
+---
+title: Overview
+description: Architecture and building blocks of Nimbus Sync.
+---
+
+# Overview
+
+{% $product %} follows a classic client–server architecture. Clients detect changes in the file system, transfer only the blocks that have changed and receive changes from other devices in real time.
+
+{% figure src="../assets/architecture.svg" caption="Nimbus Sync architecture" alt="Clients connect through the gateway to the sync service, the metadata database and object storage." /%}
+
+## Building blocks
+
+| Component | Responsibility | Technology |
+|:---|:---|:---|
+| Gateway | Authentication, authorization, load balancing | Rust, HTTP/2 |
+| Sync service | Merges changes, detects conflicts | Rust |
+| Metadata | Folder structure, versions, shares | PostgreSQL 16 |
+| Object storage | File contents in encrypted blocks | S3-compatible |
+
+## Synchronization
+
+Every file is split into blocks of 4 MiB. When a file changes, the client uploads only the affected blocks. The storage a versioned folder needs can be estimated as follows:
+
+```math
+S approx s dot (1 + v dot r)
+```
+
+Here {% math formula="s" /%} is the size of the current data, {% math formula="v" /%} the number of versions retained and {% math formula="r" /%} the average share of data that changes per version.
+
+{% callout type="important" title="End-to-end encryption" %}
+File contents are encrypted with AES-256-GCM on the device itself. Neither the server nor the storage provider can read them. Key management is described in [Configuration › Encryption](configuration.mdoc#encryption).
+{% /callout %}
+
+## Conflicts
+
+When two people edit the same file at the same time, no change is lost: {% $product %} creates a conflicted copy and notifies both of them.
+
+{% details title="How is a conflict detected?" %}
+Every block carries a version vector. If the client's vector no longer matches the server's when it uploads, there is a conflict. The conflicted copy gets the suffix `(conflict <device> <date>)`.
+{% /details %}

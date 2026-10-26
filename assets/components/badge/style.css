@@ -1,0 +1,21 @@
+.ts-badge {
+  --c: #64748b;
+  display: inline-flex;
+  align-items: center;
+  padding: .02rem .42rem;
+  border: 1px solid color-mix(in srgb, var(--c) 26%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--c) 12%, var(--ts-bg));
+  color: color-mix(in srgb, var(--c) 80%, var(--ts-fg));
+  font-size: .78em;
+  font-weight: 600;
+  line-height: 1.5;
+  vertical-align: .08em;
+  white-space: nowrap;
+}
+.ts-badge--blue { --c: #2563eb; }
+.ts-badge--green { --c: #16a34a; }
+.ts-badge--yellow { --c: #ca8a04; }
+.ts-badge--orange { --c: #ea580c; }
+.ts-badge--red { --c: #dc2626; }
+.ts-badge--purple { --c: #7c3aed; }

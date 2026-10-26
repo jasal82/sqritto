@@ -1,0 +1,20 @@
+{
+  "name": "tab",
+  "title": "Tab",
+  "description": "Eine Registerkarte innerhalb von `tabs`.",
+  "category": "Struktur",
+  "parents": ["tabs"],
+  "attributes": {
+    "label": { "type": "String", "required": true, "description": "Beschriftung der Registerkarte" }
+  },
+  "snippet": "{% tab label=\"${Beschriftung}\" %}\n${Inhalt}\n{% /tab %}",
+  "en": {
+    "title": "Tab",
+    "description": "A single tab inside `tabs`.",
+    "category": "Structure",
+    "snippet": "{% tab label=\"${Label}\" %}\n${Content}\n{% /tab %}",
+    "attributes": {
+      "label": "Label of the tab"
+    }
+  }
+}

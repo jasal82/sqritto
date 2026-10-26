@@ -1,0 +1,16 @@
+---
+title: Risiken und technische Schulden
+---
+
+# Risiken und technische Schulden
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Benennen Sie bekannte Risiken und technische Schulden offen – mit Bewertung und geplanten Maßnahmen. Das schafft Transparenz für Entscheidungen.
+{% /callout %}
+
+| Risiko / Schuld | Bewertung | Maßnahme |
+|:---|:---:|:---|
+| Abhängigkeit von einem einzigen Telematik-Anbieter | {% badge color="red" %}hoch{% /badge %} | Zweiten Anbieter bis Q2 anbinden |
+| Unklare Rechenzeit der Routenoptimierung | {% badge color="orange" %}mittel{% /badge %} | Lasttest mit Echtdaten, siehe [ADR-003](09-architekturentscheidungen.mdoc) |
+| Fehlende Ende-zu-Ende-Tests der App | {% badge color="yellow" %}mittel{% /badge %} | Testautomatisierung im nächsten Inkrement |
+| Altdaten aus Tabellen mit uneinheitlichen Kennzeichen | {% badge color="gray" %}niedrig{% /badge %} | Bereinigung bei der Migration |

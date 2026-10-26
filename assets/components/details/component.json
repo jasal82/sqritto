@@ -1,0 +1,21 @@
+{
+  "name": "details",
+  "title": "Aufklappbereich",
+  "description": "Ein- und ausklappbarer Abschnitt. Im PDF wird der Inhalt immer vollständig gezeigt.",
+  "category": "Struktur",
+  "attributes": {
+    "title": { "type": "String", "default": "Details", "description": "Beschriftung der Zeile zum Aufklappen" },
+    "open": { "type": "Boolean", "default": false, "description": "Anfangs geöffnet" }
+  },
+  "snippet": "{% details title=\"${Titel}\" %}\n${Inhalt}\n{% /details %}",
+  "en": {
+    "title": "Collapsible section",
+    "description": "Section that can be expanded and collapsed. In the PDF the content is always shown in full.",
+    "category": "Structure",
+    "snippet": "{% details title=\"${Title}\" %}\n${Content}\n{% /details %}",
+    "attributes": {
+      "title": "Label of the row that expands the section",
+      "open": "Initially expanded"
+    }
+  }
+}

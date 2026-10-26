@@ -1,0 +1,70 @@
+---
+title: Installation
+description: Install Nimbus Sync on Windows, macOS and Linux.
+---
+
+# Installation
+
+## System requirements
+
+| Component | Minimum | Recommended |
+|:---|:---|:---|
+| Operating system | Windows 10, macOS 13, Ubuntu 22.04 | Latest version |
+| Memory | 2 GB | 8 GB |
+| Free disk space | 500 MB plus your data | SSD |
+| Network | 10 Mbit/s | 100 Mbit/s |
+
+## Install the client
+
+{% tabs group="os" %}
+{% tab label="Windows" %}
+Install the client with the Windows Package Manager:
+
+```powershell
+winget install NimbusLabs.NimbusSync
+```
+{% /tab %}
+{% tab label="macOS" %}
+Install the client with Homebrew:
+
+```bash
+brew install --cask nimbus-sync
+```
+{% /tab %}
+{% tab label="Linux" %}
+The install script detects your distribution and sets up the package repository:
+
+```bash
+curl -fsSL https://get.nimbus.example | sh
+```
+{% /tab %}
+{% /tabs %}
+
+> [!NOTE]
+> For managed deployments, MSI and PKG packages with a preconfigured server address are available.
+
+## Set up your first folder {% #first-folder %}
+
+{% steps %}
+{% step title="Sign in" %}
+Launch {% $product %} and sign in with your work account. If multi-factor authentication is enabled, approve the sign-in in your authenticator app.
+{% /step %}
+{% step title="Choose a folder" %}
+Select **Add folder** or press {% kbd keys="Ctrl+N" /%}. Files already in the folder are uploaded during the first sync.
+{% /step %}
+{% step title="Check the status" %}
+Confirm on the command line that everything is in sync:
+
+```bash
+nimbus status --verbose
+```
+{% /step %}
+{% /steps %}
+
+{% callout type="warning" title="Network drives" %}
+Folders on network drives (SMB, NFS) are not supported because changes there are not reported reliably.
+{% /callout %}
+
+## Updates
+
+The client checks for updates once a day and installs them on the next restart. You can control automatic updates with the `updates.channel` option; see [Configuration](configuration.mdoc#general-options).

@@ -1,0 +1,26 @@
+{
+  "name": "callout",
+  "title": "Hinweisbox",
+  "description": "Hebt Hinweise, Tipps, Warnungen und Gefahren hervor. Auch als GitHub-Hinweis `> [!NOTE]` nutzbar.",
+  "category": "Hervorhebung",
+  "attributes": {
+    "type": {
+      "type": "String",
+      "default": "note",
+      "matches": ["note", "info", "tip", "success", "important", "warning", "caution", "danger"],
+      "description": "Art des Hinweises"
+    },
+    "title": { "type": "String", "description": "Optionale Überschrift" }
+  },
+  "snippet": "{% callout type=\"${note}\" title=\"${Titel}\" %}\n${Text}\n{% /callout %}",
+  "en": {
+    "title": "Callout",
+    "description": "Highlights notes, tips, warnings and dangers. Also available as a GitHub alert `> [!NOTE]`.",
+    "category": "Emphasis",
+    "snippet": "{% callout type=\"${note}\" title=\"${Title}\" %}\n${Text}\n{% /callout %}",
+    "attributes": {
+      "type": "Kind of callout",
+      "title": "Optional heading"
+    }
+  }
+}

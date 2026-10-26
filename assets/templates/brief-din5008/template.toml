@@ -1,0 +1,12 @@
+[template]
+name = "Brief nach DIN 5008"
+description = "Geschäftsbrief mit Anschriftfeld, Informationsblock, Falzmarken und Geschäftsangaben – normgerecht für Fensterumschläge."
+category = "Korrespondenz"
+kind = "typst"
+outputs = ["pdf"]
+order = 10
+
+[template.en]
+name = "Business letter (DIN 5008, German)"
+description = "German business letter following DIN 5008 with address field, reference block, fold marks and company details – fits German window envelopes. Content is in German."
+category = "Correspondence"

@@ -1,0 +1,30 @@
+---
+title: Kontextabgrenzung
+---
+
+# Kontextabgrenzung
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Grenzen Sie das System von seiner Umgebung ab: Wer nutzt es, mit welchen Nachbarsystemen tauscht es welche Daten aus? Der fachliche Kontext zeigt Inhalte, der technische Kontext Kanäle und Protokolle.
+{% /callout %}
+
+## Fachlicher Kontext
+
+{% figure src="../assets/kontext.svg" caption="Fachlicher Kontext von FlottenPilot" alt="FlottenPilot im Zentrum, verbunden mit Disposition, Fahrpersonal, ERP-System, Telematik und Werkstattportal." /%}
+
+| Partner | Eingabe | Ausgabe |
+|:---|:---|:---|
+| Disposition | Aufträge, Tourplanung | Tourpläne, Lagebild |
+| Fahrpersonal | Lieferstatus, Fotos, Unterschriften | Tour, Navigation |
+| ERP-System | Stammdaten, Kostenstellen | Kosten je Tour |
+| Telematik | Positionen, Fahrzeugdaten | – |
+| Werkstattportal | Terminbestätigungen | Wartungsaufträge |
+
+## Technischer Kontext
+
+| Partner | Kanal | Format | Frequenz |
+|:---|:---|:---|:---|
+| ERP-System | Integrationsplattform (Kafka) | Avro | Ereignisgesteuert |
+| Telematik | HTTPS-Webhook | JSON | alle 30 Sekunden je Fahrzeug |
+| Werkstattportal | REST | JSON | bei Bedarf |
+| Mobile App | HTTPS, WebSocket | JSON | dauerhaft verbunden |

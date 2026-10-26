@@ -1,0 +1,30 @@
+---
+title: Randbedingungen
+---
+
+# Randbedingungen
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Randbedingungen schränken den Lösungsraum ein, bevor die erste Entscheidung fällt: Vorgaben zu Technik, Organisation und Konventionen. Notieren Sie zu jeder Randbedingung kurz den Hintergrund.
+{% /callout %}
+
+## Technische Randbedingungen
+
+| Randbedingung | Hintergrund |
+|:---|:---|
+| Betrieb auf Kubernetes (Azure AKS) | Konzernweiter Plattformstandard |
+| Datenhaltung in PostgreSQL | Vorhandene Betriebserfahrung, Lizenzkosten |
+| Mobile App für Android und iOS | Gemischter Gerätebestand im Fuhrpark |
+| Anbindung an SAP S/4HANA über Integrationsplattform | Keine direkten Zugriffe auf das ERP erlaubt |
+
+## Organisatorische Randbedingungen
+
+- Produktivstart zum Beginn des Weihnachtsgeschäfts im November
+- Zwei Entwicklungsteams mit je sechs Personen, agiles Vorgehen in zweiwöchigen Iterationen
+- Betrieb und Rufbereitschaft durch den zentralen IT-Betrieb
+
+## Konventionen
+
+- Architekturentscheidungen werden als ADR in [Kapitel 9](09-architekturentscheidungen.mdoc) festgehalten.
+- Schnittstellen werden mit OpenAPI 3.1 beschrieben und versioniert.
+- Code und Dokumentation liegen gemeinsam im Git-Repository („Docs as Code“).

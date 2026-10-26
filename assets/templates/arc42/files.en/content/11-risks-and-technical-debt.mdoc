@@ -1,0 +1,16 @@
+---
+title: Risks and technical debt
+---
+
+# Risks and technical debt
+
+{% callout type="info" title="About this chapter" %}
+Name known risks and technical debt openly – with an assessment and planned measures. This creates transparency for decision-making.
+{% /callout %}
+
+| Risk / debt | Assessment | Measure |
+|:---|:---:|:---|
+| Dependency on a single telematics provider | {% badge color="red" %}high{% /badge %} | Integrate a second provider by Q2 |
+| Unclear computation time of route optimization | {% badge color="orange" %}medium{% /badge %} | Load test with production data, see [ADR-003](09-architecture-decisions.mdoc#adr-003) |
+| Missing end-to-end tests for the app | {% badge color="yellow" %}medium{% /badge %} | Test automation in the next increment |
+| Legacy spreadsheet data with inconsistent vehicle IDs | {% badge color="gray" %}low{% /badge %} | Clean up during migration |

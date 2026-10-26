@@ -1,0 +1,34 @@
+[document]
+title = "{{title}}"
+subtitle = "FleetPilot project – Architecture review"
+kind = "markdoc"
+template = "protokoll"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+date = "{{isodate}}"
+description = "Minutes of a meeting with decisions and action items."
+
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+pages = ["index.mdoc"]
+
+[variables]
+when = "{{isodate}}, 10:00–11:30 a.m."
+location = "Atlas meeting room / video call"
+
+[pdf]
+enabled = true
+template = "@sqritto/report:0.1.0"
+
+[pdf.options]
+doctype = "Meeting minutes"
+serif = false
+numbering = false
+accent = "#0f766e"
+
+[html]
+enabled = true
+accent = "#0f766e"
+include_pdf = true

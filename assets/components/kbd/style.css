@@ -1,0 +1,18 @@
+.ts-keys { font: inherit; }
+.ts-keys kbd,
+.ts-keys:not(.is-split) {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: .05em .4em;
+  border: 1px solid var(--ts-border);
+  border-radius: 5px;
+  background: var(--ts-surface);
+  color: var(--ts-heading);
+  font-family: var(--ts-font-mono);
+  font-size: .8em;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+}
+.ts-keys.is-split { display: inline-flex; align-items: center; gap: .2em; }
+.ts-keys__plus { color: var(--ts-muted); font-size: .8em; }

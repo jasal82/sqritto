@@ -1,0 +1,33 @@
+---
+title: Querschnittliche Konzepte
+---
+
+# Querschnittliche Konzepte
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Hier stehen Regeln und Lösungsideen, die mehrere Bausteine betreffen – etwa Sicherheit, Fehlerbehandlung, Protokollierung oder Persistenz. So bleibt die Bausteinsicht frei von Wiederholungen.
+{% /callout %}
+
+## Sicherheit
+
+Anmeldung erfolgt über den zentralen Identitätsanbieter (OpenID Connect). Die Dienste prüfen Zugriffstoken und Rollen selbst; es gibt keine vertrauenswürdige Zone innerhalb des Clusters („Zero Trust“).
+
+## Datenschutz
+
+{% callout type="warning" title="Personenbezogene Daten" %}
+Positionsdaten erlauben Rückschlüsse auf das Fahrpersonal. Sie werden nach 90 Tagen auf Fahrzeugebene aggregiert und anschließend gelöscht.
+{% /callout %}
+
+## Weitere Konzepte
+
+{% details title="Protokollierung und Überwachung" %}
+Alle Dienste schreiben strukturierte Protokolle (JSON) und Metriken im OpenTelemetry-Format. Warnschwellen sind je Dienst im Repository hinterlegt.
+{% /details %}
+
+{% details title="Fehlerbehandlung" %}
+Fehlgeschlagene Ereignisse landen nach drei Versuchen in einer Dead-Letter-Queue und werden im Betriebs-Dashboard angezeigt.
+{% /details %}
+
+{% details title="Internationalisierung" %}
+Oberflächen sind zweisprachig (Deutsch, Englisch). Texte liegen in Ressourcendateien, Datumsangaben folgen der Spracheinstellung.
+{% /details %}

@@ -1,0 +1,15 @@
+{
+  "name": "footnote",
+  "title": "Fußnote",
+  "description": "Fußnote im Fließtext. Im PDF am Seitenende, im HTML als Popover mit Liste am Seitenende.",
+  "category": "Inline",
+  "inline": true,
+  "attributes": {},
+  "snippet": "{% footnote %}${Text der Fußnote}{% /footnote %}",
+  "en": {
+    "title": "Footnote",
+    "description": "Footnote in running text. In the PDF at the bottom of the page, in HTML as a popover with a list at the end of the page.",
+    "category": "Inline",
+    "snippet": "{% footnote %}${Footnote text}{% /footnote %}"
+  }
+}

@@ -1,0 +1,65 @@
+[document]
+title = "{{title}}"
+subtitle = "Architekturdokumentation nach arc42"
+kind = "markdoc"
+template = "arc42"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+version = "0.1"
+description = "Architekturbeschreibung gegliedert nach arc42."
+
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+title = "Ziele und Rahmen"
+pages = [
+  "01-einfuehrung-und-ziele.mdoc",
+  "02-randbedingungen.mdoc",
+  "03-kontextabgrenzung.mdoc",
+]
+
+[[markdoc.nav]]
+title = "Lösung"
+pages = [
+  "04-loesungsstrategie.mdoc",
+  "05-bausteinsicht.mdoc",
+  "06-laufzeitsicht.mdoc",
+  "07-verteilungssicht.mdoc",
+  "08-querschnittliche-konzepte.mdoc",
+]
+
+[[markdoc.nav]]
+title = "Entscheidungen und Qualität"
+pages = [
+  "09-architekturentscheidungen.mdoc",
+  "10-qualitaetsanforderungen.mdoc",
+  "11-risiken-und-technische-schulden.mdoc",
+]
+
+[[markdoc.nav]]
+title = "Anhang"
+pages = ["12-glossar.mdoc"]
+
+[variables]
+system = "FlottenPilot"
+organisation = "Muster Logistik AG"
+
+[pdf]
+enabled = true
+template = "@sqritto/arc42:0.1.0"
+
+[pdf.options]
+toc = true
+numbering = true
+cover = true
+accent = "#4f46e5"
+system = "FlottenPilot – Flottenmanagement"
+organization = "Muster Logistik AG"
+status = "Entwurf"
+
+[html]
+enabled = true
+accent = "#4f46e5"
+include_pdf = true
+footer = "Gliederung nach arc42 (arc42.org)"

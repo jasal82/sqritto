@@ -1,0 +1,26 @@
+{
+  "name": "endpoint",
+  "title": "API-Endpunkt",
+  "description": "Beschreibt einen HTTP-Endpunkt mit Methode und Pfad.",
+  "category": "Technik",
+  "attributes": {
+    "method": {
+      "type": "String",
+      "default": "GET",
+      "matches": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
+      "description": "HTTP-Methode"
+    },
+    "path": { "type": "String", "required": true, "description": "Pfad, z. B. /api/v1/kunden/{id}" }
+  },
+  "snippet": "{% endpoint method=\"${GET}\" path=\"${/api/v1/ressource}\" %}\n${Beschreibung}\n{% /endpoint %}",
+  "en": {
+    "title": "API endpoint",
+    "description": "Describes an HTTP endpoint with method and path.",
+    "category": "Technical",
+    "snippet": "{% endpoint method=\"${GET}\" path=\"${/api/v1/resource}\" %}\n${Description}\n{% /endpoint %}",
+    "attributes": {
+      "method": "HTTP method",
+      "path": "Path, e.g. /api/v1/customers/{id}"
+    }
+  }
+}

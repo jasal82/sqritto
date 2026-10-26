@@ -1,0 +1,7 @@
+[package]
+name = "techdoc"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Sqritto"]
+license = "MIT-0"
+description = "Layout für technische Dokumentation: Titelseite, Inhaltsverzeichnis, Kapitel, laufende Kopfzeilen."

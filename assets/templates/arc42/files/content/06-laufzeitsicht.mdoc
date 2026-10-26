@@ -1,0 +1,30 @@
+---
+title: Laufzeitsicht
+---
+
+# Laufzeitsicht
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Zeigen Sie an wenigen, wichtigen Szenarien, wie die Bausteine zur Laufzeit zusammenwirken – etwa zentrale Abläufe, Fehlerfälle oder den Systemstart.
+{% /callout %}
+
+## Lieferung zustellen (offline)
+
+{% steps %}
+{% step title="Tour laden" %}
+Vor Fahrtantritt lädt die App die Tour vom App-Backend und speichert sie lokal.
+{% /step %}
+{% step title="Zustellung erfassen" %}
+Das Fahrpersonal bestätigt die Zustellung mit Unterschrift und Foto – auch ohne Mobilfunkempfang.
+{% /step %}
+{% step title="Synchronisieren" %}
+Sobald eine Verbindung besteht, überträgt die App alle Meldungen in der richtigen Reihenfolge. Das App-Backend veröffentlicht das Ereignis `DeliveryCompleted`.
+{% /step %}
+{% step title="Lagebild aktualisieren" %}
+Das Lagebild verarbeitet das Ereignis und aktualisiert die Ansicht der Disposition innerhalb von zwei Sekunden.
+{% /step %}
+{% /steps %}
+
+{% details title="Fehlerfall: doppelte Meldungen" %}
+Jede Meldung trägt eine eindeutige Kennung. Das App-Backend verwirft Duplikate, sodass wiederholte Übertragungen unkritisch sind (idempotente Verarbeitung).
+{% /details %}

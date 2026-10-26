@@ -1,0 +1,12 @@
+[template]
+name = "Besprechungsprotokoll"
+description = "Protokoll mit Teilnehmenden, Tagesordnung, Beschlüssen und Aufgabenliste – schnell ausgefüllt und sauber gesetzt."
+category = "Geschäftlich"
+kind = "markdoc"
+outputs = ["pdf", "html"]
+order = 20
+
+[template.en]
+name = "Meeting minutes"
+description = "Minutes with attendees, agenda, decisions and action items – quick to fill in, cleanly typeset."
+category = "Business"

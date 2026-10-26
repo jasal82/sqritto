@@ -1,0 +1,7 @@
+[package]
+name = "rechnung"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Sqritto"]
+license = "MIT-0"
+description = "Rechnung nach DIN 5008 mit automatischer Berechnung von Netto, Umsatzsteuer und Brutto."

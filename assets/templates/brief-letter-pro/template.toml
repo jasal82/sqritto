@@ -1,0 +1,12 @@
+[template]
+name = "Brief mit „letter-pro“ (Typst Universe)"
+description = "DIN-5008-Brief mit der beliebten Community-Vorlage letter-pro aus Typst Universe. Benötigt beim ersten Übersetzen eine Internetverbindung."
+category = "Korrespondenz"
+kind = "typst"
+outputs = ["pdf"]
+order = 20
+
+[template.en]
+name = "Letter with “letter-pro” (Typst Universe, German)"
+description = "German DIN 5008 letter built on the popular community package letter-pro from Typst Universe. Content is in German; requires an internet connection the first time it is compiled."
+category = "Correspondence"

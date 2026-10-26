@@ -1,0 +1,39 @@
+---
+title: Architekturentscheidungen
+---
+
+# Architekturentscheidungen
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Dokumentieren Sie wichtige, schwer umkehrbare oder umstrittene Entscheidungen als *Architecture Decision Records* (ADR): Kontext, Entscheidung, Konsequenzen. Verworfene Alternativen sind ebenso wertvoll wie die gewählte.
+{% /callout %}
+
+## ADR-001: Ereignisgesteuerte Kommunikation {% #adr-001 %}
+
+{% decision id="ADR-001" title="Dienste kommunizieren über Ereignisse" status="accepted" date="12.03.2026" %}
+**Kontext:** Lagebild, Auswertung und Wartung benötigen dieselben Informationen über Touren und Fahrzeuge.
+
+**Entscheidung:** Dienste veröffentlichen fachliche Ereignisse über Kafka. Synchrone Aufrufe zwischen Diensten sind nicht vorgesehen.
+
+**Konsequenzen:** Lose Kopplung und gute Skalierbarkeit; dafür sind Abläufe schwerer nachzuvollziehen und erfordern verteiltes Tracing.
+{% /decision %}
+
+## ADR-002: Planung ohne Telematik {% #adr-002 %}
+
+{% decision id="ADR-002" title="Tourplanung funktioniert unabhängig von Telematikdaten" status="accepted" date="02.04.2026" %}
+**Kontext:** Telematik-Anbieter haben in der Vergangenheit stundenlange Ausfälle gehabt.
+
+**Entscheidung:** Die Tourplanung nutzt ausschließlich eigene Stammdaten. Telematik reichert nur das Lagebild an.
+
+**Konsequenzen:** Die Disposition bleibt bei Störungen arbeitsfähig; Positionsangaben können zeitweise veraltet sein.
+{% /decision %}
+
+## ADR-003: Eigene Routenoptimierung
+
+{% decision id="ADR-003" title="Routenoptimierung als eigener Baustein" status="proposed" date="20.10.2026" %}
+**Kontext:** Der bisherige Kartendienst berechnet Routen nur für einzelne Fahrzeuge.
+
+**Entscheidung (Vorschlag):** Einsatz einer Open-Source-Optimierung (VRP-Solver) in einem eigenen Dienst.
+
+**Offene Punkte:** Lizenzprüfung, Rechenzeit bei mehr als 500 Stopps.
+{% /decision %}

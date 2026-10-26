@@ -1,0 +1,12 @@
+[template]
+name = "Leeres Markdoc-Dokument"
+description = "Startet mit einer einzigen Seite – Markdoc-Quellen, Ausgabe als PDF und HTML-Site."
+category = "Leer"
+kind = "markdoc"
+outputs = ["pdf", "html"]
+order = 10
+
+[template.en]
+name = "Blank Markdoc document"
+description = "Starts with a single page – Markdoc sources, published as PDF and HTML site."
+category = "Blank"

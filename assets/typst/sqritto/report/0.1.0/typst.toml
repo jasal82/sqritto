@@ -1,0 +1,7 @@
+[package]
+name = "report"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Sqritto"]
+license = "MIT-0"
+description = "Editoriales Layout für Berichte und Whitepaper."

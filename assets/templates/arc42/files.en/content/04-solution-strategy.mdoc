@@ -1,0 +1,18 @@
+---
+title: Solution strategy
+---
+
+# Solution strategy
+
+{% callout type="info" title="About this chapter" %}
+Summarize the fundamental decisions that shape the architecture – such as technologies, decomposition and patterns. Link each strategy to the quality goals from chapter 1.
+{% /callout %}
+
+| Quality goal | Architectural approach | Details |
+|:---|:---|:---:|
+| Availability | Stateless services running as multiple instances; planning works without telematics | [ADR-002](09-architecture-decisions.mdoc#adr-002) |
+| Usability | Offline-capable app with a local database and synchronization | [Runtime view](06-runtime-view.mdoc) |
+| Modifiability | Provider-specific adapters behind a common telematics interface | [Building block view](05-building-block-view.mdoc) |
+| Data protection | Position data anonymized after 90 days, role-based access only | [Concepts](08-cross-cutting-concepts.mdoc) |
+
+The system is decomposed into services along business capabilities that communicate through events. Synchronous calls are limited to queries from the user interfaces.

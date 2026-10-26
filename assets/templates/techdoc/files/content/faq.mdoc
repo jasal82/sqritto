@@ -1,0 +1,27 @@
+---
+title: Häufige Fragen
+description: Antworten auf häufige Fragen zu Nimbus Sync.
+---
+
+# Häufige Fragen
+
+{% details title="Werden gelöschte Dateien sofort entfernt?" %}
+Nein. Gelöschte Dateien landen 30 Tage im Papierkorb und können über die Weboberfläche oder mit `nimbus restore` wiederhergestellt werden.
+{% /details %}
+
+{% details title="Kann ich die Synchronisation pausieren?" %}
+Ja, über das Symbol im Infobereich oder mit {% kbd keys="Strg+Umschalt+P" /%}. Laufende Übertragungen werden sauber abgeschlossen.
+{% /details %}
+
+{% details title="Welche Dateien werden ausgeschlossen?" %}
+Standardmäßig temporäre Dateien wie `~$*.docx`, `.DS_Store` und `Thumbs.db`. Eigene Muster legen Sie mit der Option `exclude` fest.
+{% /details %}
+
+## Begriffe {% #begriffe %}
+
+- [x] **Block** – Teilstück einer Datei mit fester Größe (4 MiB)
+- [x] **Konfliktkopie** – Kopie einer Datei bei gleichzeitiger Bearbeitung
+- [x] **Versionsvektor** – Zähler je Gerät zur Erkennung von Konflikten
+- [ ] **Selektive Synchronisation** – geplant für Version 2.5
+
+{% partial file="partials/support.mdoc" /%}

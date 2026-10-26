@@ -1,0 +1,32 @@
+.ts-endpoint {
+  --c: #2563eb;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border: 1px solid var(--ts-border);
+  border-radius: 12px;
+  background: var(--ts-bg);
+}
+.ts-endpoint--POST { --c: #16a34a; }
+.ts-endpoint--PUT { --c: #ca8a04; }
+.ts-endpoint--PATCH { --c: #9333ea; }
+.ts-endpoint--DELETE { --c: #dc2626; }
+.ts-endpoint--HEAD, .ts-endpoint--OPTIONS { --c: #64748b; }
+.ts-endpoint__header {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .6rem .9rem;
+  background: var(--ts-surface);
+}
+.ts-endpoint__body { padding: .1rem 1rem .7rem; border-top: 1px solid var(--ts-border); }
+.ts-endpoint__method {
+  padding: .12rem .45rem;
+  border-radius: 5px;
+  background: var(--c);
+  color: #fff;
+  font-family: var(--ts-font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+.ts-endpoint__path { padding: 0 !important; border: 0 !important; background: none !important; color: var(--ts-heading); font-size: .9rem; }

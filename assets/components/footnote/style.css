@@ -1,0 +1,37 @@
+.ts-fn { position: relative; }
+.ts-fn__ref {
+  padding: 0 .1em;
+  border: 0;
+  background: none;
+  color: var(--ts-accent);
+  font: inherit;
+  font-size: .72em;
+  font-weight: 600;
+  line-height: 1;
+  vertical-align: super;
+  cursor: pointer;
+}
+.ts-fn__ref:focus-visible { outline: 2px solid var(--ts-accent); outline-offset: 1px; border-radius: 3px; }
+.ts-fn__body {
+  position: absolute;
+  z-index: 20;
+  bottom: calc(100% + .4rem);
+  left: 50%;
+  display: none;
+  width: max-content;
+  max-width: min(22rem, 80vw);
+  padding: .6rem .8rem;
+  border: 1px solid var(--ts-border);
+  border-radius: var(--ts-radius);
+  background: var(--ts-bg);
+  box-shadow: var(--ts-shadow-lg);
+  color: var(--ts-fg);
+  font-size: .86rem;
+  line-height: 1.5;
+  transform: translateX(-50%);
+}
+.ts-fn.is-open .ts-fn__body, .ts-fn__ref:hover + .ts-fn__body { display: block; }
+.ts-footnotes { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--ts-border); color: var(--ts-muted); font-size: .9rem; }
+.ts-footnotes ol { padding-left: 1.4rem; }
+.ts-footnotes li { margin: .3rem 0; }
+.ts-footnotes a.ts-fn-back { margin-left: .35rem; text-decoration: none; }

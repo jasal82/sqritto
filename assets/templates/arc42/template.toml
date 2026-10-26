@@ -1,0 +1,12 @@
+[template]
+name = "Architekturdokumentation (arc42)"
+description = "Alle zwölf arc42-Kapitel mit Ausfüllhilfen, Kontextdiagramm, Qualitätsszenarien und Architekturentscheidungen."
+category = "Dokumentation"
+kind = "markdoc"
+outputs = ["pdf", "html"]
+order = 20
+
+[template.en]
+name = "Architecture documentation (arc42)"
+description = "All twelve arc42 chapters with guidance, context diagram, quality scenarios and architecture decisions."
+category = "Documentation"

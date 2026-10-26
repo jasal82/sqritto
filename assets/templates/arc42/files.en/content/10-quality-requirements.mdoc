@@ -1,0 +1,32 @@
+---
+title: Quality requirements
+---
+
+# Quality requirements
+
+{% callout type="info" title="About this chapter" %}
+Make the quality goals from chapter 1 concrete with a quality tree and testable *quality scenarios*: stimulus, environment, expected response and measure.
+{% /callout %}
+
+## Quality tree
+
+- **Availability**
+  - Resilience of dispatch operations
+  - Recovery after outages
+- **Usability**
+  - Operating the app while on the road
+  - Offline capability
+- **Modifiability**
+  - Integrating new telematics providers
+- **Data protection**
+  - Deletion and anonymization
+
+## Quality scenarios
+
+| ID | Scenario | Measure |
+|:---|:---|:---|
+| Q1 | A cluster node fails during peak planning hours. | No interruption for dispatch |
+| Q2 | Telematics is unreachable for two hours. | Route planning fully usable |
+| Q3 | A driver confirms a delivery without network coverage. | Recorded in under 10 seconds, sent once connected |
+| Q4 | A new telematics provider is integrated. | Effort of at most 10 person-days |
+| Q5 | An erasure request under Art. 17 GDPR is received. | Completed within 14 days, logged |

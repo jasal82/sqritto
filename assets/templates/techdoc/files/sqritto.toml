@@ -1,0 +1,50 @@
+[document]
+title = "{{title}}"
+subtitle = "Handbuch für Installation, Konfiguration und Betrieb"
+kind = "markdoc"
+template = "techdoc"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+version = "1.0"
+description = "Technische Dokumentation mit PDF- und HTML-Ausgabe."
+
+# Seiten liegen im Ordner content/. Die Navigation legt Reihenfolge und
+# Gruppierung fest – im PDF als Kapitel, im HTML als Seitenleiste.
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+title = "Einführung"
+pages = ["index.mdoc", "ueberblick.mdoc"]
+
+[[markdoc.nav]]
+title = "Benutzung"
+pages = ["installation.mdoc", "konfiguration.mdoc"]
+
+[[markdoc.nav]]
+title = "Referenz"
+pages = ["api.mdoc", "faq.mdoc"]
+
+# Variablen stehen in allen Seiten als {% $name %} zur Verfügung.
+[variables]
+produkt = "Nimbus Sync"
+produktversion = "2.4"
+support_email = "support@nimbus.example"
+
+[pdf]
+enabled = true
+template = "@sqritto/techdoc:0.1.0"
+
+[pdf.options]
+toc = true
+numbering = true
+cover = true
+accent = "#2563eb"
+logo = "assets/logo.svg"
+organization = "Nimbus Labs GmbH"
+
+[html]
+enabled = true
+accent = "#2563eb"
+logo = "assets/logo.svg"
+include_pdf = true

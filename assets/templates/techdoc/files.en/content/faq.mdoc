@@ -1,0 +1,27 @@
+---
+title: FAQ
+description: Answers to frequently asked questions about Nimbus Sync.
+---
+
+# Frequently asked questions
+
+{% details title="Are deleted files removed immediately?" %}
+No. Deleted files stay in the trash for 30 days and can be restored from the web console or with `nimbus restore`.
+{% /details %}
+
+{% details title="Can I pause syncing?" %}
+Yes – from the icon in the notification area (the menu bar on macOS) or with {% kbd keys="Ctrl+Shift+P" /%}. Transfers already in progress are completed cleanly.
+{% /details %}
+
+{% details title="Which files are excluded?" %}
+By default, temporary files such as `~$*.docx`, `.DS_Store` and `Thumbs.db`. You can add your own patterns with the `exclude` option.
+{% /details %}
+
+## Glossary {% #glossary %}
+
+- [x] **Block** – fixed-size chunk of a file (4 MiB)
+- [x] **Conflicted copy** – copy of a file that was edited in two places at the same time
+- [x] **Version vector** – per-device counter used to detect conflicts
+- [ ] **Selective sync** – planned for version 2.5
+
+{% partial file="partials/support.mdoc" /%}

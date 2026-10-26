@@ -1,0 +1,20 @@
+{
+  "name": "step",
+  "title": "Schritt",
+  "description": "Ein einzelner Schritt innerhalb von `steps`.",
+  "category": "Struktur",
+  "parents": ["steps"],
+  "attributes": {
+    "title": { "type": "String", "description": "Überschrift des Schritts" }
+  },
+  "snippet": "{% step title=\"${Titel}\" %}\n${Beschreibung}\n{% /step %}",
+  "en": {
+    "title": "Step",
+    "description": "A single step inside `steps`.",
+    "category": "Structure",
+    "snippet": "{% step title=\"${Title}\" %}\n${Description}\n{% /step %}",
+    "attributes": {
+      "title": "Heading of the step"
+    }
+  }
+}

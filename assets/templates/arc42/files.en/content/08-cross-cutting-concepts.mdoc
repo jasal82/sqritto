@@ -1,0 +1,33 @@
+---
+title: Cross-cutting concepts
+---
+
+# Cross-cutting concepts
+
+{% callout type="info" title="About this chapter" %}
+This chapter collects rules and solution approaches that apply to several building blocks – such as security, error handling, logging or persistence. This keeps the building block view free of repetition.
+{% /callout %}
+
+## Security
+
+Users sign in through the central identity provider (OpenID Connect). Each service validates access tokens and roles itself; there is no trusted zone inside the cluster ("zero trust").
+
+## Data protection
+
+{% callout type="warning" title="Personal data" %}
+Position data allows conclusions about individual drivers. After 90 days it is aggregated at vehicle level and the raw data is deleted.
+{% /callout %}
+
+## Further concepts
+
+{% details title="Logging and monitoring" %}
+All services write structured logs (JSON) and metrics in OpenTelemetry format. Alert thresholds for each service are kept in the repository.
+{% /details %}
+
+{% details title="Error handling" %}
+Events that still fail after three attempts are moved to a dead-letter queue and shown on the operations dashboard.
+{% /details %}
+
+{% details title="Internationalization" %}
+The user interfaces are available in English and Spanish. Texts are kept in resource files; dates and numbers follow the user's language setting.
+{% /details %}

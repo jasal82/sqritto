@@ -1,0 +1,52 @@
+---
+title: Besprechungsprotokoll
+description: Ergebnisprotokoll des Architektur-Jour-fixe.
+---
+
+# Rahmendaten
+
+- **Termin:** {% $termin %}
+- **Ort:** {% $ort %}
+- **Moderation:** Jonas Weber
+- **Protokoll:** {% join($document.authors, ", ") %}
+
+## Teilnehmende
+
+| Name | Rolle | Anwesend |
+|:---|:---|:---:|
+| Dr. Erika Beispiel | Leitung IT-Architektur | ja |
+| Jonas Weber | Produktverantwortung | ja |
+| Aylin Demir | Entwicklung Team Disposition | ja |
+| Tobias Krüger | IT-Betrieb | entschuldigt |
+
+# Tagesordnung
+
+1. Stand der Telematik-Anbindung
+2. Entscheidung zur Routenoptimierung
+3. Verschiedenes
+
+## TOP 1 – Stand der Telematik-Anbindung
+
+Der Adapter für den ersten Anbieter läuft seit zwei Wochen stabil in der Abnahmeumgebung. Die Datenqualität ist gut; vereinzelt fehlen Positionsmeldungen in Tunneln, was fachlich unkritisch ist.
+
+## TOP 2 – Entscheidung zur Routenoptimierung
+
+Diskutiert wurden ein eigener Optimierungsdienst und die Erweiterung des bestehenden Kartendienstes. Die Rechenzeit bei mehr als 500 Stopps ist noch nicht belastbar gemessen.
+
+{% callout type="success" title="Beschluss" %}
+Der eigene Optimierungsdienst wird als Prototyp umgesetzt. Die endgültige Entscheidung fällt nach dem Lasttest in der nächsten Besprechung.
+{% /callout %}
+
+## TOP 3 – Verschiedenes
+
+Die Abnahmeumgebung ist am 3. November wegen Wartung nicht verfügbar.
+
+# Aufgaben
+
+- [ ] Lasttest der Routenoptimierung mit Echtdaten vorbereiten – *Aylin Demir*, bis 07.11.
+- [ ] Wartungsfenster an alle Teams kommunizieren – *Tobias Krüger*, bis 30.10.
+- [x] Protokoll verteilen – *{% join($document.authors, ", ") %}*
+
+# Nächste Besprechung
+
+Die nächste Besprechung findet in zwei Wochen zur gleichen Zeit statt.

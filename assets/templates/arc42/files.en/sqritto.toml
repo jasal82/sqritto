@@ -1,0 +1,65 @@
+[document]
+title = "{{title}}"
+subtitle = "Architecture documentation based on arc42"
+kind = "markdoc"
+template = "arc42"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+version = "0.1"
+description = "Architecture description structured according to arc42."
+
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+title = "Goals and scope"
+pages = [
+  "01-introduction-and-goals.mdoc",
+  "02-constraints.mdoc",
+  "03-context-and-scope.mdoc",
+]
+
+[[markdoc.nav]]
+title = "Solution"
+pages = [
+  "04-solution-strategy.mdoc",
+  "05-building-block-view.mdoc",
+  "06-runtime-view.mdoc",
+  "07-deployment-view.mdoc",
+  "08-cross-cutting-concepts.mdoc",
+]
+
+[[markdoc.nav]]
+title = "Decisions and quality"
+pages = [
+  "09-architecture-decisions.mdoc",
+  "10-quality-requirements.mdoc",
+  "11-risks-and-technical-debt.mdoc",
+]
+
+[[markdoc.nav]]
+title = "Appendix"
+pages = ["12-glossary.mdoc"]
+
+[variables]
+system = "FleetPilot"
+organization = "Meridian Logistics"
+
+[pdf]
+enabled = true
+template = "@sqritto/arc42:0.1.0"
+
+[pdf.options]
+toc = true
+numbering = true
+cover = true
+accent = "#4f46e5"
+system = "FleetPilot – Fleet management"
+organization = "Meridian Logistics"
+status = "Draft"
+
+[html]
+enabled = true
+accent = "#4f46e5"
+include_pdf = true
+footer = "Structured according to arc42 (arc42.org)"

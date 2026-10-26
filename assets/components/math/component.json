@@ -1,0 +1,21 @@
+{
+  "name": "math",
+  "title": "Formel",
+  "description": "Mathematische Formel in Typst-Notation, z. B. `a^2 + b^2 = c^2`. Für abgesetzte Formeln einen ```math-Codeblock verwenden.",
+  "category": "Inline",
+  "inline": true,
+  "selfClosing": true,
+  "typst": "ts-math-inline",
+  "attributes": {
+    "formula": { "type": "String", "required": true, "description": "Formel in Typst-Mathe-Syntax" }
+  },
+  "snippet": "{% math formula=\"${a^2 + b^2 = c^2}\" /%}",
+  "en": {
+    "title": "Formula",
+    "description": "Mathematical formula in Typst notation, e.g. `a^2 + b^2 = c^2`. For display formulas, use a ```math code block.",
+    "category": "Inline",
+    "attributes": {
+      "formula": "Formula in Typst math syntax"
+    }
+  }
+}

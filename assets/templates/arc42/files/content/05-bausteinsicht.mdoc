@@ -1,0 +1,38 @@
+---
+title: Bausteinsicht
+---
+
+# Bausteinsicht
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Die Bausteinsicht zeigt die statische Zerlegung des Systems in Bausteine und ihre Beziehungen – von oben nach unten in Ebenen. Beschreiben Sie je Baustein Zweck und Schnittstellen („Blackbox“).
+{% /callout %}
+
+## Ebene 1
+
+| Baustein | Verantwortung |
+|:---|:---|
+| Tourplanung | Erstellt und optimiert Touren, verwaltet Aufträge |
+| Lagebild | Führt Positionen und Status zu einer Echtzeitsicht zusammen |
+| Telematik-Gateway | Normalisiert Daten verschiedener Telematik-Anbieter |
+| Wartung | Plant Wartungen, tauscht Termine mit dem Werkstattportal aus |
+| Auswertung | Berechnet Kennzahlen und Kosten je Fahrzeug und Tour |
+| App-Backend | Stellt der Mobile App Touren bereit und nimmt Statusmeldungen an |
+
+## Ebene 2: Telematik-Gateway
+
+Das Gateway kapselt jeden Anbieter in einem eigenen Adapter. Alle Adapter liefern Ereignisse im gemeinsamen Format `VehiclePositionReported`.
+
+```json {% title="Ereignis VehiclePositionReported" %}
+{
+  "vehicleId": "LKW-0417",
+  "timestamp": "2026-10-25T07:42:13Z",
+  "position": { "lat": 48.1374, "lon": 11.5755 },
+  "speedKmh": 42,
+  "source": "telematik-a"
+}
+```
+
+{% callout type="tip" %}
+Ein neuer Anbieter erfordert nur einen weiteren Adapter. Die übrigen Bausteine bleiben unverändert.
+{% /callout %}

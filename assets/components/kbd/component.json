@@ -1,0 +1,21 @@
+{
+  "name": "kbd",
+  "title": "Tastenkürzel",
+  "description": "Stellt Tasten und Tastenkombinationen dar, z. B. Strg+Umschalt+P.",
+  "category": "Inline",
+  "inline": true,
+  "selfClosing": true,
+  "attributes": {
+    "keys": { "type": "String", "required": true, "description": "Tasten, getrennt durch +" }
+  },
+  "snippet": "{% kbd keys=\"${Strg+S}\" /%}",
+  "en": {
+    "title": "Keyboard shortcut",
+    "description": "Shows keys and key combinations, e.g. Ctrl+Shift+P.",
+    "category": "Inline",
+    "snippet": "{% kbd keys=\"${Ctrl+S}\" /%}",
+    "attributes": {
+      "keys": "Keys, separated by +"
+    }
+  }
+}

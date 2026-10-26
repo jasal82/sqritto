@@ -1,0 +1,30 @@
+---
+title: Architecture constraints
+---
+
+# Architecture constraints
+
+{% callout type="info" title="About this chapter" %}
+Constraints narrow the solution space before the first decision is made: requirements regarding technology, organization and conventions. Briefly note the background of each constraint.
+{% /callout %}
+
+## Technical constraints
+
+| Constraint | Background |
+|:---|:---|
+| Runs on Kubernetes (Azure AKS) | Company-wide platform standard |
+| Data stored in PostgreSQL | Existing operational experience, license costs |
+| Mobile app for Android and iOS | Mixed device landscape across the fleet |
+| Connection to SAP S/4HANA via the integration platform | Direct access to the ERP system is not permitted |
+
+## Organizational constraints
+
+- Go-live before the holiday peak season starts in November
+- Two development teams of six people each, working in two-week iterations
+- Operations and on-call duty provided by central IT Operations
+
+## Conventions
+
+- Architecture decisions are recorded as ADRs in [chapter 9](09-architecture-decisions.mdoc).
+- Interfaces are described and versioned with OpenAPI 3.1.
+- Code and documentation live together in the Git repository ("docs as code").

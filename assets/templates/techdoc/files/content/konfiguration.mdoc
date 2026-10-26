@@ -1,0 +1,58 @@
+---
+title: Konfiguration
+description: Alle Optionen der Konfigurationsdatei nimbus.yaml.
+---
+
+# Konfiguration
+
+{% $produkt %} liest seine Einstellungen aus der Datei `nimbus.yaml`. Sie liegt unter Windows in `%APPDATA%\Nimbus`, unter macOS und Linux in `~/.config/nimbus`.
+
+## Beispielkonfiguration
+
+```yaml {% title="nimbus.yaml" lines=true %}
+server: https://sync.example.com
+account: erika.mustermann@example.com
+
+folders:
+  - path: ~/Projekte
+    exclude: ["node_modules", "*.tmp"]
+  - path: ~/Dokumente/Verträge
+    versions: 50
+
+bandwidth:
+  upload: 20mbit
+  download: unlimited
+
+updates:
+  channel: stable
+```
+
+## Allgemeine Optionen
+
+| Option | Typ | Standard | Beschreibung |
+|:---|:---|:---|:---|
+| `server` | URL | – | Adresse des Nimbus-Servers |
+| `account` | Text | – | Anmeldename |
+| `folders` | Liste | `[]` | Zu synchronisierende Ordner |
+| `bandwidth.upload` | Rate | `unlimited` | Obergrenze für das Hochladen |
+| `updates.channel` | `stable` / `beta` | `stable` | Kanal für Aktualisierungen |
+
+{% details title="Erweiterte Optionen" %}
+| Option | Standard | Beschreibung |
+|:---|:---|:---|
+| `scan.interval` | `300` | Sekunden zwischen vollständigen Prüfläufen |
+| `log.level` | `info` | `error`, `warn`, `info` oder `debug` |
+| `proxy` | System | Proxy-Server, z. B. `http://proxy:3128` |
+{% /details %}
+
+## Verschlüsselung {% #verschluesselung %}
+
+Beim ersten Start erzeugt der Client ein Schlüsselpaar. Der private Schlüssel wird mit Ihrem Kennwort geschützt und im Schlüsselbund des Betriebssystems abgelegt.{% footnote %}Unter Linux wird die Secret-Service-Schnittstelle verwendet, etwa GNOME Keyring oder KWallet.{% /footnote %}
+
+{% callout type="danger" title="Wiederherstellungsschlüssel aufbewahren" %}
+Geht der private Schlüssel verloren und existiert kein Wiederherstellungsschlüssel, sind die verschlüsselten Daten unwiederbringlich verloren. Drucken Sie den Schlüssel aus und bewahren Sie ihn sicher auf.
+{% /callout %}
+
+## Bandbreite begrenzen
+
+Die verfügbare Bandbreite teilt {% $produkt %} gleichmäßig auf alle aktiven Übertragungen auf. Bei einer Grenze von 20 Mbit/s dauert das Hochladen von 1 GB also rund sieben Minuten – unabhängig davon, ob Sie das [Einrichten des ersten Ordners](installation.mdoc#ersten-ordner) gerade abgeschlossen haben oder nicht.

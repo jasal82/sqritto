@@ -1,0 +1,43 @@
+.ts-adr {
+  --c: #ca8a04;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border: 1px solid var(--ts-border);
+  border-radius: 12px;
+  background: var(--ts-bg);
+}
+.ts-adr--accepted { --c: #16a34a; }
+.ts-adr--rejected { --c: #dc2626; }
+.ts-adr--deprecated { --c: #64748b; }
+.ts-adr--superseded { --c: #7c3aed; }
+.ts-adr__header {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .7rem 1rem;
+  border-bottom: 1px solid var(--ts-border);
+  background: var(--ts-surface);
+}
+.ts-adr__id { color: var(--ts-muted); font-family: var(--ts-font-mono); font-size: .8rem; }
+.ts-adr__title { flex: 1; margin: 0 !important; color: var(--ts-heading); font-weight: 600; }
+.ts-adr__status {
+  padding: .08rem .45rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--c) 14%, var(--ts-bg));
+  color: color-mix(in srgb, var(--c) 80%, var(--ts-fg));
+  font-size: .75rem;
+  font-weight: 650;
+}
+/* Status nach Dokumentsprache: Englisch, für Deutsch (:lang(de)) deutsch. */
+.ts-adr__status[data-status="proposed"]::before { content: "Proposed"; }
+.ts-adr__status[data-status="accepted"]::before { content: "Accepted"; }
+.ts-adr__status[data-status="rejected"]::before { content: "Rejected"; }
+.ts-adr__status[data-status="deprecated"]::before { content: "Deprecated"; }
+.ts-adr__status[data-status="superseded"]::before { content: "Superseded"; }
+.ts-adr__status[data-status="proposed"]:lang(de)::before { content: "Vorgeschlagen"; }
+.ts-adr__status[data-status="accepted"]:lang(de)::before { content: "Angenommen"; }
+.ts-adr__status[data-status="rejected"]:lang(de)::before { content: "Abgelehnt"; }
+.ts-adr__status[data-status="deprecated"]:lang(de)::before { content: "Veraltet"; }
+.ts-adr__status[data-status="superseded"]:lang(de)::before { content: "Ersetzt"; }
+.ts-adr__date { margin: .7rem 1rem 0 !important; color: var(--ts-muted); font-size: .85rem; }
+.ts-adr__body { padding: .1rem 1rem .8rem; }

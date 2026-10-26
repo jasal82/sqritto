@@ -1,0 +1,25 @@
+{
+  "name": "badge",
+  "title": "Badge",
+  "description": "Kleines farbiges Etikett im Fließtext, z. B. für Status oder Versionen.",
+  "category": "Inline",
+  "inline": true,
+  "attributes": {
+    "color": {
+      "type": "String",
+      "default": "gray",
+      "matches": ["gray", "blue", "green", "yellow", "orange", "red", "purple"],
+      "description": "Farbe"
+    }
+  },
+  "snippet": "{% badge color=\"${green}\" %}${Stabil}{% /badge %}",
+  "en": {
+    "title": "Badge",
+    "description": "Small colored label in running text, e.g. for a status or version.",
+    "category": "Inline",
+    "snippet": "{% badge color=\"${green}\" %}${Stable}{% /badge %}",
+    "attributes": {
+      "color": "Color"
+    }
+  }
+}

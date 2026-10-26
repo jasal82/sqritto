@@ -1,0 +1,40 @@
+---
+title: Introduction and goals
+description: Requirements, quality goals and stakeholders of FleetPilot.
+---
+
+# Introduction and goals
+
+{% callout type="info" title="About this chapter" %}
+Describe *why* the system exists: the essential functional requirements, the three to five most important quality goals and the people affected by the architecture. Keep this chapter short – details belong in chapter 10.
+{% /callout %}
+
+## Requirements overview
+
+{% $system %} helps {% $organization %} plan and monitor its fleet of around 480 delivery vehicles. The system replaces a patchwork of spreadsheets and standalone tools.
+
+The key use cases:
+
+1. Plan the next day's routes and assign them to vehicles
+2. Track vehicle positions and delivery status in real time
+3. Schedule maintenance proactively and coordinate it with workshops
+4. Analyze costs per vehicle and per route
+
+## Quality goals
+
+| Priority | Quality goal | Motivation |
+|:---:|:---|:---|
+| 1 | Availability | Dispatch works in shifts that start at 4 a.m. |
+| 2 | Usability | Drivers use the app on the road and can spare little attention. |
+| 3 | Modifiability | New telematics providers must be added without restructuring the system. |
+| 4 | Data protection | Position data is personal data and subject to the GDPR. |
+
+## Stakeholders
+
+| Role | Expectations of the architecture |
+|:---|:---|
+| Head of Dispatch | Reliable daily planning, even when individual services fail |
+| Drivers | A simple, fast app that also works offline |
+| IT Operations | Standardized operation on the existing Kubernetes platform |
+| Data Protection Officer | Traceable storage and deletion of position data |
+| Development team | Clear interfaces and independently deployable building blocks |

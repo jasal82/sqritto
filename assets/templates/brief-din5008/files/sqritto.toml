@@ -1,0 +1,16 @@
+[document]
+title = "{{title}}"
+kind = "typst"
+template = "brief-din5008"
+authors = ["{{author}}"]
+lang = "de"
+description = "Geschäftsbrief nach DIN 5008, Form B."
+
+[typst]
+entry = "main.typ"
+
+[pdf]
+enabled = true
+
+[html]
+enabled = false

@@ -1,0 +1,40 @@
+---
+title: Einführung und Ziele
+description: Aufgabenstellung, Qualitätsziele und Stakeholder von FlottenPilot.
+---
+
+# Einführung und Ziele
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Beschreiben Sie, *warum* es das System gibt: die wesentlichen fachlichen Anforderungen, die drei bis fünf wichtigsten Qualitätsziele und die Personen, die von der Architektur betroffen sind. Halten Sie das Kapitel kurz – Details gehören in Kapitel 10.
+{% /callout %}
+
+## Aufgabenstellung
+
+{% $system %} unterstützt die {% $organisation %} bei der Planung und Überwachung ihrer rund 480 Lieferfahrzeuge. Das System löst eine Sammlung von Tabellen und Einzelwerkzeugen ab.
+
+Die wichtigsten Anwendungsfälle:
+
+1. Touren für den Folgetag planen und Fahrzeugen zuordnen
+2. Fahrzeugpositionen und Lieferstatus in Echtzeit verfolgen
+3. Wartungen vorausschauend planen und mit Werkstätten abstimmen
+4. Kosten je Fahrzeug und Tour auswerten
+
+## Qualitätsziele
+
+| Priorität | Qualitätsziel | Motivation |
+|:---:|:---|:---|
+| 1 | Verfügbarkeit | Die Disposition arbeitet im Schichtbetrieb ab 4 Uhr morgens. |
+| 2 | Bedienbarkeit | Fahrpersonal nutzt die App während der Tour mit wenig Aufmerksamkeit. |
+| 3 | Änderbarkeit | Neue Telematik-Anbieter sollen ohne Umbau angebunden werden können. |
+| 4 | Datenschutz | Positionsdaten sind personenbezogen und unterliegen der DSGVO. |
+
+## Stakeholder
+
+| Rolle | Erwartung an die Architektur |
+|:---|:---|
+| Leitung Disposition | Verlässliche Tagesplanung, auch bei Ausfall einzelner Dienste |
+| Fahrpersonal | Einfache, schnelle App, die auch offline funktioniert |
+| IT-Betrieb | Standardisierter Betrieb auf der bestehenden Kubernetes-Plattform |
+| Datenschutzbeauftragte | Nachvollziehbare Speicherung und Löschung von Positionsdaten |
+| Entwicklungsteam | Klare Schnittstellen und unabhängig auslieferbare Bausteine |

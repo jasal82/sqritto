@@ -1,0 +1,27 @@
+{
+  "name": "figure",
+  "title": "Abbildung",
+  "description": "Bild mit Beschriftung, Breite und automatischer Nummerierung im PDF.",
+  "category": "Medien",
+  "selfClosing": true,
+  "typst": "ts-figure-block",
+  "attributes": {
+    "src": { "type": "String", "required": true, "asset": true, "description": "Pfad zum Bild, z. B. /assets/diagramm.svg" },
+    "caption": { "type": "String", "description": "Bildunterschrift" },
+    "alt": { "type": "String", "description": "Alternativtext für Barrierefreiheit" },
+    "width": { "type": "String", "description": "Breite, z. B. 60% oder 300px" }
+  },
+  "snippet": "{% figure src=\"${/assets/bild.png}\" caption=\"${Beschriftung}\" width=\"80%\" /%}",
+  "en": {
+    "title": "Figure",
+    "description": "Image with caption, width and automatic numbering in the PDF.",
+    "category": "Media",
+    "snippet": "{% figure src=\"${/assets/image.png}\" caption=\"${Caption}\" width=\"80%\" /%}",
+    "attributes": {
+      "src": "Path to the image, e.g. /assets/diagram.svg",
+      "caption": "Caption",
+      "alt": "Alternative text for accessibility",
+      "width": "Width, e.g. 60% or 300px"
+    }
+  }
+}

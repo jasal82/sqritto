@@ -1,0 +1,12 @@
+[template]
+name = "Bericht / Whitepaper"
+description = "Editorial gesetzter Bericht mit Zusammenfassung, Abbildungen und Quellenangaben – als PDF und Webseite."
+category = "Berichte"
+kind = "markdoc"
+outputs = ["pdf", "html"]
+order = 30
+
+[template.en]
+name = "Report / white paper"
+description = "Editorially typeset report with abstract, figures and footnotes – as PDF and website."
+category = "Reports"

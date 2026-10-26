@@ -1,0 +1,14 @@
+{
+  "name": "pagebreak",
+  "title": "Seitenumbruch",
+  "description": "Erzwingt im PDF einen Seitenumbruch. Im HTML ohne Wirkung (außer beim Drucken).",
+  "category": "Layout",
+  "selfClosing": true,
+  "attributes": {},
+  "snippet": "{% pagebreak /%}",
+  "en": {
+    "title": "Page break",
+    "description": "Forces a page break in the PDF. No effect in HTML (except when printing).",
+    "category": "Layout"
+  }
+}

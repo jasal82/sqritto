@@ -1,0 +1,26 @@
+---
+title: Verteilungssicht
+---
+
+# Verteilungssicht
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Die Verteilungssicht beschreibt die technische Infrastruktur und wie die Bausteine darauf verteilt werden: Umgebungen, Rechenzentren, Knoten und Netzwerke.
+{% /callout %}
+
+## Infrastruktur
+
+| Knoten | Inhalt | Ausprägung |
+|:---|:---|:---|
+| AKS-Cluster „prod-weu“ | Alle Dienste von {% $system %} | 3 Knoten, zonenredundant |
+| Azure Database for PostgreSQL | Datenhaltung je Dienst (eigene Schemata) | Hochverfügbar, 35 Tage Sicherung |
+| Event Hubs (Kafka-API) | Ereignisse zwischen den Diensten | 4 Partitionen je Thema |
+| App-Stores | Mobile App | Verteilung über MDM |
+
+## Umgebungen
+
+| Umgebung | Zweck | Daten |
+|:---|:---|:---|
+| Entwicklung | Integration jeder Änderung | synthetisch |
+| Abnahme | Fachliche Tests mit der Disposition | anonymisierte Kopie |
+| Produktion | Betrieb | echt |

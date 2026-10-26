@@ -1,0 +1,44 @@
+---
+title: Willkommen
+description: Einstieg in die Dokumentation von Nimbus Sync.
+---
+
+# Willkommen
+
+**{% $produkt %}** synchronisiert Dateien zwischen Arbeitsplätzen, Servern und Cloud-Speichern – verschlüsselt, versioniert und vollständig unter Ihrer Kontrolle. Dieses Handbuch beschreibt Installation, Konfiguration und Betrieb von Version {% $produktversion %}.
+
+{% callout type="tip" title="Schnellstart" %}
+Sie möchten {% $produkt %} zunächst ausprobieren? Folgen Sie der [Installation](installation.mdoc) – nach etwa fünf Minuten ist Ihr erster Ordner synchronisiert.
+{% /callout %}
+
+## Was Sie hier finden
+
+{% cards columns=2 %}
+{% card title="Überblick" href="ueberblick.mdoc" %}
+Architektur, Bausteine und wichtige Begriffe auf einen Blick.
+{% /card %}
+{% card title="Installation" href="installation.mdoc" %}
+Schritt für Schritt auf Windows, macOS und Linux.
+{% /card %}
+{% card title="Konfiguration" href="konfiguration.mdoc" %}
+Alle Optionen der Datei `nimbus.yaml` erklärt.
+{% /card %}
+{% card title="REST-API" href="api.mdoc" %}
+Endpunkte, Authentifizierung und Beispiele.
+{% /card %}
+{% /cards %}
+
+## Zielgruppe
+
+Das Handbuch richtet sich an Administratorinnen und Administratoren, die {% $produkt %} in einer Organisation einführen und betreiben. Grundkenntnisse in Netzwerktechnik und im Umgang mit der Kommandozeile werden vorausgesetzt.
+
+## Darstellungskonventionen
+
+| Darstellung | Bedeutung |
+|---|---|
+| `nimbus status` | Befehle, Dateinamen und Konfigurationswerte |
+| {% kbd keys="Strg+Umschalt+S" /%} | Tastenkürzel |
+| {% badge color="green" %}Stabil{% /badge %} {% badge color="yellow" %}Vorschau{% /badge %} | Reifegrad einer Funktion |
+| *Kursiv* | Begriffe, die im [Glossar](faq.mdoc#begriffe) erklärt werden |
+
+{% partial file="partials/support.mdoc" /%}

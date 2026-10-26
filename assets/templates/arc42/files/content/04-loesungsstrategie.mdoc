@@ -1,0 +1,18 @@
+---
+title: Lösungsstrategie
+---
+
+# Lösungsstrategie
+
+{% callout type="info" title="Inhalt dieses Kapitels" %}
+Fassen Sie die grundlegenden Entscheidungen zusammen, die die Architektur prägen – etwa Technologien, Zerlegung, Muster. Verknüpfen Sie jede Strategie mit den Qualitätszielen aus Kapitel 1.
+{% /callout %}
+
+| Qualitätsziel | Ansatz in der Architektur | Details |
+|:---|:---|:---|
+| Verfügbarkeit | Zustandslose Dienste, mehrfach betrieben; Planung funktioniert ohne Telematik | [ADR-002](09-architekturentscheidungen.mdoc#adr-002) |
+| Bedienbarkeit | Offline-fähige App mit lokaler Datenbank und Synchronisation | [Laufzeitsicht](06-laufzeitsicht.mdoc) |
+| Änderbarkeit | Anbieterspezifische Adapter hinter einer gemeinsamen Telematik-Schnittstelle | [Bausteinsicht](05-bausteinsicht.mdoc) |
+| Datenschutz | Positionsdaten nach 90 Tagen anonymisieren, Zugriff nur rollenbasiert | [Konzepte](08-querschnittliche-konzepte.mdoc) |
+
+Das System ist in fachlich geschnittene Dienste zerlegt, die über Ereignisse kommunizieren. Synchrone Aufrufe beschränken sich auf Abfragen der Oberflächen.

@@ -1,0 +1,41 @@
+---
+title: Überblick
+description: Architektur und Bausteine von Nimbus Sync.
+---
+
+# Überblick
+
+{% $produkt %} folgt einer klassischen Client-Server-Architektur. Clients erkennen Änderungen im Dateisystem, übertragen nur geänderte Blöcke und erhalten Änderungen anderer Geräte in Echtzeit.
+
+{% figure src="../assets/architektur.svg" caption="Architektur von Nimbus Sync" alt="Clients verbinden sich über das Gateway mit Sync-Dienst, Metadaten-Datenbank und Objektspeicher." /%}
+
+## Bausteine
+
+| Baustein | Aufgabe | Technologie |
+|:---|:---|:---|
+| Gateway | Authentifizierung, Rechteprüfung, Lastverteilung | Rust, HTTP/2 |
+| Sync-Dienst | Änderungen zusammenführen, Konflikte erkennen | Rust |
+| Metadaten | Ordnerstruktur, Versionen, Freigaben | PostgreSQL 16 |
+| Objektspeicher | Dateiinhalte in verschlüsselten Blöcken | S3-kompatibel |
+
+## Synchronisation
+
+Jede Datei wird in Blöcke von 4 MiB zerlegt. Ändert sich eine Datei, überträgt der Client nur die betroffenen Blöcke. Der Speicherbedarf eines Ordners mit Versionierung lässt sich näherungsweise abschätzen:
+
+```math
+S approx s dot (1 + v dot r)
+```
+
+Dabei ist {% math formula="s" /%} die Größe der aktuellen Daten, {% math formula="v" /%} die Anzahl aufbewahrter Versionen und {% math formula="r" /%} der mittlere Änderungsanteil je Version.
+
+{% callout type="important" title="Ende-zu-Ende-Verschlüsselung" %}
+Dateiinhalte werden bereits auf dem Gerät mit AES-256-GCM verschlüsselt. Weder der Server noch der Speicheranbieter können sie lesen. Die Schlüsselverwaltung beschreibt [Konfiguration › Verschlüsselung](konfiguration.mdoc#verschluesselung).
+{% /callout %}
+
+## Konflikte
+
+Bearbeiten zwei Personen dieselbe Datei gleichzeitig, bleibt keine Änderung verloren: {% $produkt %} legt eine Konfliktkopie an und benachrichtigt beide.
+
+{% details title="Wie wird ein Konflikt erkannt?" %}
+Jeder Block trägt einen Versionsvektor. Weicht der Vektor des Clients beim Hochladen vom Stand des Servers ab, liegt ein Konflikt vor. Die Konfliktkopie erhält den Namenszusatz `(Konflikt <Gerät> <Datum>)`.
+{% /details %}

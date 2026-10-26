@@ -1,0 +1,39 @@
+---
+title: Architecture decisions
+---
+
+# Architecture decisions
+
+{% callout type="info" title="About this chapter" %}
+Document important, costly-to-reverse or controversial decisions as *Architecture Decision Records* (ADRs): context, decision, consequences. Rejected alternatives are just as valuable as the chosen one.
+{% /callout %}
+
+## ADR-001: Event-driven communication {% #adr-001 %}
+
+{% decision id="ADR-001" title="Services communicate through events" status="accepted" date="2026-03-12" %}
+**Context:** Live view, analytics and maintenance all need the same information about routes and vehicles.
+
+**Decision:** Services publish domain events via Kafka. Synchronous calls between services are not intended.
+
+**Consequences:** Loose coupling and good scalability; in return, workflows are harder to trace and require distributed tracing.
+{% /decision %}
+
+## ADR-002: Planning without telematics {% #adr-002 %}
+
+{% decision id="ADR-002" title="Route planning works independently of telematics data" status="accepted" date="2026-04-02" %}
+**Context:** Telematics providers have had outages lasting several hours in the past.
+
+**Decision:** Route planning relies exclusively on our own master data. Telematics only enriches the live view.
+
+**Consequences:** Dispatch can keep working during outages; position data may be out of date for a while.
+{% /decision %}
+
+## ADR-003: Dedicated route optimization {% #adr-003 %}
+
+{% decision id="ADR-003" title="Route optimization as a separate building block" status="proposed" date="2026-10-20" %}
+**Context:** The current map service only calculates routes for individual vehicles.
+
+**Proposed decision:** Use an open-source optimizer (VRP solver) in a dedicated service.
+
+**Open questions:** License review; computation time for more than 500 stops.
+{% /decision %}

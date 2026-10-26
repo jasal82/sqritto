@@ -1,0 +1,58 @@
+---
+title: Configuration
+description: Every option in the nimbus.yaml configuration file.
+---
+
+# Configuration
+
+{% $product %} reads its settings from `nimbus.yaml`. On Windows, the file is located in `%APPDATA%\Nimbus`; on macOS and Linux, in `~/.config/nimbus`.
+
+## Example configuration
+
+```yaml {% title="nimbus.yaml" lines=true %}
+server: https://sync.example.com
+account: jane.doe@example.com
+
+folders:
+  - path: ~/Projects
+    exclude: ["node_modules", "*.tmp"]
+  - path: ~/Documents/Contracts
+    versions: 50
+
+bandwidth:
+  upload: 20mbit
+  download: unlimited
+
+updates:
+  channel: stable
+```
+
+## General options
+
+| Option | Type | Default | Description |
+|:---|:---|:---|:---|
+| `server` | URL | – | Address of the Nimbus server |
+| `account` | String | – | Account used to sign in |
+| `folders` | List | `[]` | Folders to keep in sync |
+| `bandwidth.upload` | Rate | `unlimited` | Upload limit |
+| `updates.channel` | `stable` / `beta` | `stable` | Update channel |
+
+{% details title="Advanced options" %}
+| Option | Default | Description |
+|:---|:---|:---|
+| `scan.interval` | `300` | Seconds between full scans |
+| `log.level` | `info` | `error`, `warn`, `info` or `debug` |
+| `proxy` | System | Proxy server, e.g. `http://proxy:3128` |
+{% /details %}
+
+## Encryption {% #encryption %}
+
+On first launch, the client generates a key pair. The private key is protected by your password and stored in the operating system's keychain.{% footnote %}On Linux, the Secret Service API is used – for example GNOME Keyring or KWallet.{% /footnote %}
+
+{% callout type="danger" title="Keep your recovery key safe" %}
+If the private key is lost and there is no recovery key, the encrypted data cannot be recovered. Print the recovery key and store it in a secure place.
+{% /callout %}
+
+## Limiting bandwidth
+
+{% $product %} shares the available bandwidth evenly among all active transfers. With a limit of 20 Mbit/s, uploading 1 GB takes about seven minutes. Keep this in mind when [setting up your first folder](installation.mdoc#first-folder): large folders are best added outside working hours.

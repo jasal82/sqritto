@@ -1,0 +1,14 @@
+{
+  "name": "steps",
+  "title": "Schritt-für-Schritt",
+  "description": "Nummerierte Arbeitsschritte mit Verbindungslinie, ideal für Anleitungen.",
+  "category": "Struktur",
+  "attributes": {},
+  "snippet": "{% steps %}\n{% step title=\"${Erster Schritt}\" %}\n${Beschreibung}\n{% /step %}\n{% step title=\"Zweiter Schritt\" %}\nBeschreibung\n{% /step %}\n{% /steps %}",
+  "en": {
+    "title": "Steps",
+    "description": "Numbered steps with a connecting line, ideal for instructions.",
+    "category": "Structure",
+    "snippet": "{% steps %}\n{% step title=\"${First step}\" %}\n${Description}\n{% /step %}\n{% step title=\"Second step\" %}\nDescription\n{% /step %}\n{% /steps %}"
+  }
+}

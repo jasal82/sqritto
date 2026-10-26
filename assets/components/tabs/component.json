@@ -1,0 +1,19 @@
+{
+  "name": "tabs",
+  "title": "Tabs",
+  "description": "Gruppiert alternative Inhalte (z. B. Betriebssysteme, Programmiersprachen) in Registerkarten. Im PDF stehen sie untereinander.",
+  "category": "Struktur",
+  "attributes": {
+    "group": { "type": "String", "description": "Tabs derselben Gruppe wechseln gemeinsam und merken sich die Auswahl" }
+  },
+  "snippet": "{% tabs %}\n{% tab label=\"${Erster}\" %}\n${Inhalt}\n{% /tab %}\n{% tab label=\"Zweiter\" %}\nInhalt\n{% /tab %}\n{% /tabs %}",
+  "en": {
+    "title": "Tabs",
+    "description": "Groups alternative content (e.g. operating systems, programming languages) into tabs. In the PDF they appear one below the other.",
+    "category": "Structure",
+    "snippet": "{% tabs %}\n{% tab label=\"${First}\" %}\n${Content}\n{% /tab %}\n{% tab label=\"Second\" %}\nContent\n{% /tab %}\n{% /tabs %}",
+    "attributes": {
+      "group": "Tabs in the same group switch together and remember the selection"
+    }
+  }
+}

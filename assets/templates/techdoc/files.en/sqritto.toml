@@ -1,0 +1,50 @@
+[document]
+title = "{{title}}"
+subtitle = "Guide to installation, configuration and operation"
+kind = "markdoc"
+template = "techdoc"
+authors = ["{{author}}"]
+lang = "{{lang}}"
+version = "1.0"
+description = "Technical documentation with PDF and HTML output."
+
+# Pages live in the content/ folder. The navigation sets their order and
+# grouping – as chapters in the PDF, as the sidebar on the HTML site.
+[markdoc]
+content = "content"
+
+[[markdoc.nav]]
+title = "Introduction"
+pages = ["index.mdoc", "overview.mdoc"]
+
+[[markdoc.nav]]
+title = "Guides"
+pages = ["installation.mdoc", "configuration.mdoc"]
+
+[[markdoc.nav]]
+title = "Reference"
+pages = ["api.mdoc", "faq.mdoc"]
+
+# Variables are available on every page as {% $name %}.
+[variables]
+product = "Nimbus Sync"
+product_version = "2.4"
+support_email = "support@nimbus.example"
+
+[pdf]
+enabled = true
+template = "@sqritto/techdoc:0.1.0"
+
+[pdf.options]
+toc = true
+numbering = true
+cover = true
+accent = "#2563eb"
+logo = "assets/logo.svg"
+organization = "Nimbus Labs Inc."
+
+[html]
+enabled = true
+accent = "#2563eb"
+logo = "assets/logo.svg"
+include_pdf = true

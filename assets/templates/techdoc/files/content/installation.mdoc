@@ -1,0 +1,70 @@
+---
+title: Installation
+description: Nimbus Sync auf Windows, macOS und Linux installieren.
+---
+
+# Installation
+
+## Systemvoraussetzungen
+
+| Komponente | Minimum | Empfohlen |
+|:---|:---|:---|
+| Betriebssystem | Windows 10, macOS 13, Ubuntu 22.04 | aktuelle Version |
+| Arbeitsspeicher | 2 GB | 8 GB |
+| Freier Speicher | 500 MB zzgl. Daten | SSD |
+| Netzwerk | 10 Mbit/s | 100 Mbit/s |
+
+## Client installieren
+
+{% tabs group="os" %}
+{% tab label="Windows" %}
+Installieren Sie den Client mit dem Windows-Paketmanager:
+
+```powershell
+winget install NimbusLabs.NimbusSync
+```
+{% /tab %}
+{% tab label="macOS" %}
+Installieren Sie den Client mit Homebrew:
+
+```bash
+brew install --cask nimbus-sync
+```
+{% /tab %}
+{% tab label="Linux" %}
+Das Installationsskript erkennt die Distribution und richtet die Paketquelle ein:
+
+```bash
+curl -fsSL https://get.nimbus.example | sh
+```
+{% /tab %}
+{% /tabs %}
+
+> [!NOTE]
+> Für verteilte Installationen in Unternehmen stehen MSI- und PKG-Pakete mit vorkonfigurierter Serveradresse bereit.
+
+## Ersten Ordner einrichten {% #ersten-ordner %}
+
+{% steps %}
+{% step title="Anmelden" %}
+Starten Sie {% $produkt %} und melden Sie sich mit Ihrem Firmenkonto an. Bei aktivierter Mehr-Faktor-Authentifizierung bestätigen Sie die Anmeldung in Ihrer Authenticator-App.
+{% /step %}
+{% step title="Ordner auswählen" %}
+Wählen Sie **Ordner hinzufügen** oder drücken Sie {% kbd keys="Strg+N" /%}. Bestehende Dateien werden beim ersten Abgleich hochgeladen.
+{% /step %}
+{% step title="Status prüfen" %}
+Kontrollieren Sie auf der Kommandozeile, ob alles synchron ist:
+
+```bash
+nimbus status --verbose
+```
+{% /step %}
+{% /steps %}
+
+{% callout type="warning" title="Netzlaufwerke" %}
+Ordner auf Netzlaufwerken (SMB, NFS) werden nicht unterstützt, da Änderungen dort nicht zuverlässig gemeldet werden.
+{% /callout %}
+
+## Aktualisieren
+
+Der Client sucht täglich nach Aktualisierungen und installiert sie beim nächsten Neustart. Die automatische Aktualisierung lässt sich über die Option `updates.channel` steuern, siehe [Konfiguration](konfiguration.mdoc#allgemeine-optionen).
