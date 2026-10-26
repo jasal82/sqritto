@@ -48,7 +48,8 @@ struct Cli {
     #[arg(long, default_value_t = 4517)]
     port: u16,
     /// Kein Fenster/Browser öffnen.
-    #[arg(long, env = "SQRITTO_NO_OPEN")]
+    // Aus der Umgebung auch `1`/`yes` (sonst verlangt clap `true`/`false`).
+    #[arg(long, env = "SQRITTO_NO_OPEN", value_parser = clap::builder::FalseyValueParser::new())]
     no_open: bool,
     /// Im normalen Browser-Tab statt im App-Fenster öffnen.
     #[arg(long)]
