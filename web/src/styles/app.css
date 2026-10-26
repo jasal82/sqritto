@@ -14,10 +14,13 @@ body.is-resizing iframe {
   pointer-events: none;
 }
 
+/* Sichtbare 1-px-Linie mit 3 px Griffzone je Seite. content-box, sonst
+   schluckt das Padding die Linie (global gilt border-box). */
 .resizer {
   position: relative;
   z-index: 5;
   flex: none;
+  box-sizing: content-box;
   width: 1px;
   margin: 0 -3px;
   padding: 0 3px;
