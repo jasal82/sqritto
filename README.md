@@ -1,76 +1,77 @@
 # Sqritto
 
-**Docs-as-Code-Dokumentenwerkstatt in einem einzigen Programm.** Dokumente entstehen ausschließlich aus Quelltext – Markdoc oder Typst – und werden live zu einem druckfertigen PDF und einer durchsuchbaren HTML5-Website.
+**A docs-as-code workshop in a single program.** Documents are written entirely as source text – Markdoc or Typst – and turn live into a print-ready PDF and a searchable HTML5 website.
 
-- **Ein natives Binary** (Rust): Typst-Compiler, Markdoc-Engine, Weboberfläche, Vorlagen und Schriften sind eingebettet. Keine Laufzeitabhängigkeiten.
-- **Lokale App oder Server**: `sqritto` öffnet ein natives App-Fenster (WebView2 unter Windows, WKWebView unter macOS) mit eigener Titelleiste und ohne Konsolenfenster, `sqritto serve` stellt dieselbe Oberfläche für den Browser im Netzwerk bereit, `sqritto build` baut Dokumente in CI-Pipelines.
-- **Zwei Werkzeugketten**
-  - *Markdoc → Typst → PDF* und *Markdoc → HTML5* – für technische Dokumentation, Architekturbeschreibungen (arc42), Berichte, Protokolle.
-  - *Typst → PDF* – für Korrespondenz (Brief nach DIN 5008), Rechnungen und alles mit voller Layoutkontrolle; vorhandene Typst-Vorlagen aus Typst Universe lassen sich direkt einbinden.
-- **Editor** mit Syntaxhervorhebung, Autovervollständigung (Markdoc-Elemente, Attribute, Werte, Variablen, Seitenlinks, Bilder; Typst über den eingebetteten Compiler), Formatierungsleiste, Bild-Upload per Drag & Drop, Fehleranzeige direkt im Text, Befehlspalette.
-- **Echtzeitvorschau** von PDF (seitengenau, Klick springt zur Quelle, Cursor springt in die Vorschau) und HTML5 (inkl. Navigation und Suche, scrollt mit).
-- **Erweiterbares Markdoc**: Hinweisboxen, Aufklappbereiche, Tabs, Schritte, Karten, Abbildungen, Badges, Tastenkürzel, Formeln, Fußnoten, ADRs, API-Endpunkte – jedes Element mit HTML- *und* Typst-Vorlage. Eigene Elemente legt man pro Dokument an.
-- **HTML5-Export** als eigenständiges Paket: Startseite mit Titelbereich und Kapitelübersicht (Kurzbeschreibung, Direktlinks zu Unterkapiteln, Lesezeit), Seitenleiste, „Auf dieser Seite“ mit Scroll-Spy und Lesefortschritt, Volltextsuche mit eingebautem Index (funktioniert auch per `file://`), Direktlinks an Überschriften, Bildlupe, Fokusmodus, Tastenkürzel (`/`, `[` `]`, `F`, `?`), Hell/Dunkel, Druckansicht, optional mit PDF-Download.
-- **Integrierter Git-Client**: Versionen speichern, Änderungen vergleichen, Verlauf mit Wiederherstellen, Zweige, Synchronisation mit GitHub & Co.
+- **One native binary** (Rust): the Typst compiler, the Markdoc engine, the web interface, templates and fonts are all embedded. No runtime dependencies.
+- **Local app or server**: `sqritto` opens a native app window (WebView2 on Windows, WKWebView on macOS) with its own title bar and no console window, `sqritto serve` offers the same interface to browsers on the network, and `sqritto build` builds documents in CI pipelines.
+- **Two toolchains**
+  - *Markdoc → Typst → PDF* and *Markdoc → HTML5* – for technical documentation, architecture documentation (arc42), reports and meeting minutes.
+  - *Typst → PDF* – for correspondence (German business letters per DIN 5008), invoices and anything that needs full control over the layout; existing templates from Typst Universe can be used directly.
+- **Editor** with syntax highlighting, completion (Markdoc elements, attributes, values, variables, page links, images; Typst via the embedded compiler), a formatting toolbar, image upload by drag and drop, errors shown right in the text, and a command palette.
+- **Live preview** of the PDF (page-accurate; clicking jumps to the source, the cursor scrolls the preview) and of the HTML5 output (including navigation and search, scrolls along).
+- **Extensible Markdoc**: callouts, collapsible sections, tabs, steps, cards, figures, badges, keyboard shortcuts, formulas, footnotes, ADRs and API endpoints – every element has an HTML *and* a Typst template. Custom elements can be added per document.
+- **HTML5 export** as a self-contained package: landing page with title area and chapter overview (summary, deep links to sections, reading time), sidebar, “On this page” with scroll spy and reading progress, full-text search with a built-in index (works from `file://` too), heading anchors, image zoom, focus mode, keyboard shortcuts (`/`, `[` `]`, `F`, `?`), light and dark mode, print view and an optional PDF download.
+- **Built-in Git client**: save versions, compare changes, browse and restore history, branches, sync with GitHub and others.
+- **English and German**: the interface follows the system language; everything inside a document follows the document's language.
 
 ---
 
-## Schnellstart
+## Quick start
 
 ```bash
 sqritto
 ```
 
-Startet die lokale App in einem eigenen Fenster. Ein zweiter Start holt das bereits offene Fenster nach vorne; mit dem Schließen des Fensters endet das Programm. Ist keine WebView verfügbar (z. B. unter Linux), öffnet Sqritto ein App-Fenster in Edge/Chrome und beendet sich, sobald es geschlossen wird. Dokumente liegen standardmäßig unter `Dokumente/Sqritto`, das Protokoll unter `%LOCALAPPDATA%\sqritto\sqritto.log`.
+Starts the local app in its own window. Starting it a second time brings the open window to the front; closing the window ends the program. If no WebView is available (e.g. on Linux), Sqritto opens an app window in Edge or Chrome and exits once it is closed. Documents live in `Documents/Sqritto` by default, the log in `%LOCALAPPDATA%\sqritto\sqritto.log`.
 
-| Befehl | Zweck |
+| Command | Purpose |
 | --- | --- |
-| `sqritto` | Lokale App starten (`--workspace <ordner>`, `--port`, `--no-open`, `--browser` für den Browser statt des eigenen Fensters) |
-| `sqritto serve --host 0.0.0.0 --port 8080` | Als Server betreiben. Ohne `--token` wird ein Zugangstoken erzeugt und angezeigt; `--no-auth` nur hinter einem Reverse-Proxy mit Anmeldung verwenden. Im Server-Modus sind nur Dokumente im Arbeitsbereich zugänglich. |
-| `sqritto build ./handbuch` | PDF (und HTML-ZIP) nach `./handbuch/dist/` bauen |
-| `sqritto build ./handbuch --pdf out.pdf --html site.zip --typst out.typ` | Ausgaben gezielt erzeugen; bricht mit Fehlercode ab, wenn das Dokument Fehler enthält |
+| `sqritto` | Start the local app (`--workspace <folder>`, `--port`, `--no-open`, `--browser` to use the browser instead of the app window) |
+| `sqritto serve --host 0.0.0.0 --port 8080` | Run as a server. Without `--token`, an access token is generated and printed; use `--no-auth` only behind a reverse proxy with authentication. In server mode only documents inside the workspace are accessible. |
+| `sqritto build ./handbook` | Build the PDF (and the HTML ZIP) into `./handbook/dist/` |
+| `sqritto build ./handbook --pdf out.pdf --html site.zip --typst out.typ` | Produce specific outputs; exits with an error code if the document contains errors |
 
-Umgebungsvariablen: `SQRITTO_WORKSPACE`, `SQRITTO_HOST`, `SQRITTO_PORT`, `SQRITTO_TOKEN`.
+Environment variables: `SQRITTO_WORKSPACE`, `SQRITTO_HOST`, `SQRITTO_PORT`, `SQRITTO_TOKEN`, `SQRITTO_LANGUAGE` (`de`, `en` or `system`) and `SQRITTO_CONFIG_DIR` (a separate settings folder, e.g. for tests).
 
-Unter Windows ist `sqritto.exe` ein Fensterprogramm. Aus einem Terminal aufgerufen, schreibt es seine Ausgaben trotzdem in dieses Terminal; da das Terminal aber nicht auf das Programmende wartet, empfiehlt sich in Skripten `sqritto build … | Out-Default` (PowerShell) bzw. `start /wait sqritto build …` (cmd). In CI-Pipelines mit umgeleiteter Ausgabe ist nichts weiter nötig.
+On Windows, `sqritto.exe` is a GUI program. When started from a terminal it still writes its output to that terminal, but the terminal does not wait for it to finish – in scripts use `sqritto build … | Out-Default` (PowerShell) or `start /wait sqritto build …` (cmd). In CI pipelines with redirected output nothing else is needed.
 
-## Aufbau eines Dokuments
+## Structure of a document
 
-Jedes Dokument ist ein Ordner – ideal für Git:
+Every document is a folder – a perfect fit for Git:
 
 ```
-handbuch/
-├── sqritto.toml          Projektdatei (Titel, Navigation, Ausgaben, Variablen)
-├── content/              Markdoc-Seiten (*.mdoc); content/partials/ für Bausteine
-├── assets/               Bilder, Logos, Anhänge
-├── components/           eigene Markdoc-Elemente (optional)
-├── fonts/                zusätzliche Schriften (optional)
-└── .sqritto/             Zwischenspeicher (Vorschaubild) – wird nicht versioniert
+handbook/
+├── sqritto.toml          project file (title, navigation, outputs, variables)
+├── content/              Markdoc pages (*.mdoc); content/partials/ for reusable snippets
+├── assets/               images, logos, attachments
+├── components/           custom Markdoc elements (optional)
+├── fonts/                additional fonts (optional)
+└── .sqritto/             cache (thumbnail) – not versioned
 ```
 
-Typst-Dokumente bestehen aus `sqritto.toml` und beliebigen `.typ`-Dateien (Einstieg: `[typst] entry`).
+Typst documents consist of `sqritto.toml` and any number of `.typ` files (entry point: `[typst] entry`).
 
 ### sqritto.toml
 
 ```toml
 [document]
-title = "Systemhandbuch"
-subtitle = "Installation und Betrieb"
-kind = "markdoc"            # oder "typst"
-authors = ["Erika Mustermann"]
+title = "System handbook"
+subtitle = "Installation and operation"
+kind = "markdoc"            # or "typst"
+authors = ["Jane Doe"]
 version = "2.4"
-lang = "de"
+lang = "en"
 
-[[markdoc.nav]]             # Kapitel/Abschnitte der Navigation
-title = "Einführung"
-pages = ["index.mdoc", "ueberblick.mdoc"]
+[[markdoc.nav]]             # chapters/sections of the navigation
+title = "Introduction"
+pages = ["index.mdoc", "overview.mdoc"]
 
-[variables]                 # in Markdoc: {% $produkt %}, in Typst: sys.inputs.produkt
-produkt = "Nimbus Sync"
+[variables]                 # in Markdoc: {% $product %}, in Typst: sys.inputs.product
+product = "Nimbus Sync"
 
 [pdf]
 enabled = true
-template = "@sqritto/techdoc:0.1.0"   # Layout für Markdoc; eigene Vorlage z. B. "theme/template.typ"
+template = "@sqritto/techdoc:0.1.0"   # layout for Markdoc; a custom template e.g. "theme/template.typ"
 standard = "a-2b"                     # optional: a-2b, a-3b, ua-1 …
 options = { toc = true, numbering = true, accent = "#2563eb", logo = "assets/logo.svg" }
 
@@ -78,87 +79,91 @@ options = { toc = true, numbering = true, accent = "#2563eb", logo = "assets/log
 enabled = true
 accent = "#2c5fd4"
 include_pdf = true
-landing = true                        # Startseite mit Kapitelübersicht (index.html)
+landing = true                        # landing page with chapter overview (index.html)
 ```
 
-Mit `landing = true` (Standard) wird `index.html` zur Startseite mit Titel, Untertitel, Beschreibung, Version und Stand aus `[document]` sowie einer Übersicht aller Kapitel. Die Seite `index.mdoc` erscheint dann als erstes Kapitel unter einem Namen nach ihrem Titel.
+With `landing = true` (the default), `index.html` becomes a landing page with title, subtitle, description, version and date from `[document]` plus an overview of all chapters. The page `index.mdoc` then appears as the first chapter, named after its title.
 
-Sqritto hieß während der Entwicklung „Typeset“. Dokumente aus dieser Zeit funktionieren unverändert weiter: `typeset.toml` wird als Projektdatei gelesen, Importe aus `@typeset/…` landen bei den gleichnamigen `@sqritto/…`-Paketen. Einstellungen und eigene Vorlagen werden beim ersten Start übernommen; ein vorhandener Arbeitsbereich `Dokumente/Typeset` bleibt in Gebrauch, solange es keinen Ordner `Dokumente/Sqritto` gibt.
+During development Sqritto was called “Typeset”. Documents from that time keep working unchanged: `typeset.toml` is read as the project file, and imports from `@typeset/…` resolve to the `@sqritto/…` packages of the same name. Settings and custom templates are taken over on first start; an existing workspace `Documents/Typeset` stays in use as long as there is no `Documents/Sqritto` folder.
 
 ## Markdoc
 
-Markdoc ist Markdown mit Tags. Neben normalem Markdown (Überschriften, Listen, Tabellen, Code mit Titel ```` ```rust {% title="main.rs" %} ````, Bilder mit Beschriftung `![Alt](bild.png "Beschriftung")`, Checklisten `- [ ]`, GitHub-Hinweise `> [!NOTE]`) stehen diese Elemente bereit:
+Markdoc is Markdown with tags. Besides regular Markdown (headings, lists, tables, code with a title ```` ```rust {% title="main.rs" %} ````, images with captions `![Alt](image.png "Caption")`, task lists `- [ ]`, GitHub alerts `> [!NOTE]`) these elements are available:
 
-| Element | Beispiel |
+| Element | Example |
 | --- | --- |
-| Hinweisbox | `{% callout type="warning" title="Achtung" %}…{% /callout %}` |
-| Aufklappbereich | `{% details title="Mehr" %}…{% /details %}` |
+| Callout | `{% callout type="warning" title="Caution" %}…{% /callout %}` |
+| Collapsible section | `{% details title="More" %}…{% /details %}` |
 | Tabs | `{% tabs %}{% tab label="Windows" %}…{% /tab %}{% /tabs %}` |
-| Schritte | `{% steps %}{% step title="Installieren" %}…{% /step %}{% /steps %}` |
-| Karten | `{% cards columns=2 %}{% card title="Start" href="index.mdoc" %}…{% /card %}{% /cards %}` |
-| Abbildung | `{% figure src="/assets/x.svg" caption="…" width="60%" /%}` |
-| Badge, Tastenkürzel | `{% badge color="green" %}Stabil{% /badge %}`, `{% kbd keys="Strg+S" /%}` |
-| Formel | `{% math formula="a^2 + b^2 = c^2" /%}` oder ```` ```math ```` (Typst-Mathematik, im HTML als SVG) |
-| Fußnote | `{% footnote %}…{% /footnote %}` |
-| Architekturentscheidung | `{% decision id="ADR-001" title="…" status="accepted" %}…{% /decision %}` |
-| API-Endpunkt | `{% endpoint method="GET" path="/api/v1/kunden" %}…{% /endpoint %}` |
-| Seitenumbruch | `{% pagebreak /%}` |
-| Typst direkt | ```` ```typst {% render=true %} ```` – im PDF eingebettet, im HTML als SVG |
+| Steps | `{% steps %}{% step title="Install" %}…{% /step %}{% /steps %}` |
+| Cards | `{% cards columns=2 %}{% card title="Start" href="index.mdoc" %}…{% /card %}{% /cards %}` |
+| Figure | `{% figure src="/assets/x.svg" caption="…" width="60%" /%}` |
+| Badge, keyboard shortcut | `{% badge color="green" %}Stable{% /badge %}`, `{% kbd keys="Ctrl+S" /%}` |
+| Formula | `{% math formula="a^2 + b^2 = c^2" /%}` or ```` ```math ```` (Typst math, rendered as SVG in HTML) |
+| Footnote | `{% footnote %}…{% /footnote %}` |
+| Architecture decision | `{% decision id="ADR-001" title="…" status="accepted" %}…{% /decision %}` |
+| API endpoint | `{% endpoint method="GET" path="/api/v1/customers" %}…{% /endpoint %}` |
+| Page break | `{% pagebreak /%}` |
+| Raw Typst | ```` ```typst {% render=true %} ```` – embedded in the PDF, rendered as SVG in HTML |
 
-Verweise zwischen Seiten (`[Installation](installation.mdoc#voraussetzungen)`) funktionieren in beiden Ausgaben; im PDF werden sie zu internen Links.
+Links between pages (`[Installation](installation.mdoc#requirements)`) work in both outputs; in the PDF they become internal links.
 
-### Eigene Elemente
+### Custom elements
 
-Im Editor unter **Elemente → Eigenes Element** oder **Anpassen** (kopiert ein eingebautes Element ins Dokument). Ein Element ist ein Ordner `components/<name>/`:
+In the editor, use **Elements → Custom element** or **Customize** (which copies a built-in element into the document). An element is a folder `components/<name>/`:
 
-- `component.json` – Name, Beschreibung, Attribute (`type`, `default`, `required`, `matches`, `asset`, `link`), `inline`, `selfClosing`, Snippet, Beispiel (`example`) für die Vorschau
-- `template.html` – HTML-Vorlage in Mustache-Syntax: `{{titel}}`, `{{{children}}}`, `{{#open}}…{{/open}}`, `{{^titel}}…{{/titel}}`
-- `template.typ` – Typst-Funktion `ts-<name>(attribut: standard, body)`; das Theme steht über `#import "@sqritto/markdoc:0.1.0": ts-theme` bereit
-- `style.css`, `script.js` – optional für die HTML-Ausgabe
+- `component.json` – name, description, attributes (`type`, `default`, `required`, `matches`, `asset`, `link`), `inline`, `selfClosing`, snippet, and an example (`example`) for the preview
+- `template.html` – HTML template in Mustache syntax: `{{title}}`, `{{{children}}}`, `{{#open}}…{{/open}}`, `{{^title}}…{{/title}}`
+- `template.typ` – Typst function `ts-<name>(attribute: default, body)`; the theme is available via `#import "@sqritto/markdoc:0.1.0": ts-theme`
+- `style.css`, `script.js` – optional, for the HTML output
 
-Bearbeitet wird ein Element in der **Element-Ansicht** (Elemente → *Bearbeiten*, oder eine Datei des Elements im Dateibaum öffnen): Die Einstellungen aus `component.json` stehen in einem Formular (Titel, Art, Attribute, Einfüge-Vorlage), HTML- und Typst-Vorlage, Stil und Skript im Code-Editor. Daneben zeigt eine Live-Vorschau ein Beispiel des Elements als HTML und als zugeschnittenen PDF-Ausschnitt in der Vorlage des Dokuments – einschließlich ungespeicherter Änderungen, mit Fehlermeldungen samt Zeilenangabe.
+Elements are edited in the **element view** (Elements → *Edit*, or open any file of the element in the file tree): the settings from `component.json` appear as a form (title, kind, attributes, insertion snippet), the HTML and Typst templates, style and script in the code editor. Next to it, a live preview renders an example of the element as HTML and as a cropped PDF excerpt in the document's template – including unsaved changes, with errors and line numbers.
 
 ## Typst
 
-Typst-Dokumente können alle Typst-Funktionen nutzen. Eingebaut und offline verfügbar sind:
+Typst documents can use everything Typst offers. Built in and available offline:
 
-| Paket | Zweck |
+| Package | Purpose |
 | --- | --- |
-| `@sqritto/brief:0.1.0` | Geschäftsbrief nach DIN 5008 (Form A/B, Informationsblock, Falz- und Lochmarken, Fußzeile) |
-| `@sqritto/rechnung:0.1.0` | Rechnung mit Positionen, USt.-Berechnung und Bankverbindung |
-| `@sqritto/techdoc`, `@sqritto/arc42`, `@sqritto/report` | Layouts für Markdoc-Dokumente (auch direkt nutzbar) |
+| `@sqritto/brief:0.1.0` | German business letter per DIN 5008 (form A/B, information block, fold and punch marks, footer) |
+| `@sqritto/rechnung:0.1.0` | Invoice with line items, VAT calculation and bank details (German or English labels via `sprache`) |
+| `@sqritto/techdoc`, `@sqritto/arc42`, `@sqritto/report` | Layouts for Markdoc documents (can also be used directly) |
 
-Pakete aus [Typst Universe](https://typst.app/universe) (`@preview/…`) werden beim ersten Gebrauch geladen und zwischengespeichert. Beim Anlegen eines Dokuments lässt sich jede Universe-Vorlage wie mit `typst init` übernehmen – z. B. `letter-pro` für DIN-5008-Briefe.
+Packages from [Typst Universe](https://typst.app/universe) (`@preview/…`) are downloaded on first use and cached. When creating a document, any Universe template can be used just like with `typst init`.
 
-## Versionen (Git)
+## Versions (Git)
 
-Für jedes Dokument kann ein Git-Repository angelegt werden. Lokale Funktionen (Versionen speichern, vergleichen, wiederherstellen, Zweige) funktionieren ohne installiertes Git. Für Hoch- und Herunterladen nutzt Sqritto die installierte Git-Kommandozeile und damit deren Anmeldedaten.
+Each document can have its own Git repository. Local features (saving, comparing and restoring versions, branches) work without Git installed. To push and pull, Sqritto uses the installed Git command line and therefore its credentials.
 
-## Architektur
+## Languages
+
+Sqritto is available in English and German. The interface follows the system language and can be changed under Settings → Language; the environment variable `SQRITTO_LANGUAGE` (`de`, `en`, `system`) takes precedence, e.g. for CI or screenshots. Everything that ends up in a document (labels in the PDF and the HTML5 site, elements, dates) follows the document language `lang` in `sqritto.toml` instead; languages other than German get English labels.
+
+## Architecture
 
 ```
-┌──────────────── sqritto (ein Binary) ────────────────┐
-│ axum-Server ─ REST-API, Vorschau, eingebettete UI    │
-│ ├─ Markdoc-Engine (TypeScript) in QuickJS            │
-│ │    Markdoc → Typst-Code + HTML-Seiten + Suchindex  │
-│ ├─ Typst 0.15 als Bibliothek (PDF, SVG, PNG, IDE)    │
-│ ├─ libgit2 (Versionen) + git-CLI (Synchronisation)   │
-│ └─ eingebettet: Vorlagen, Elemente, Typst-Pakete,     │
-│    Schriften (Inter, JetBrains Mono), UI, Site-JS     │
-└───────────────────────────────────────────────────────┘
+┌──────────────── sqritto (one binary) ────────────────┐
+│ axum server ─ REST API, preview, embedded UI         │
+│ ├─ Markdoc engine (TypeScript) in QuickJS            │
+│ │    Markdoc → Typst code + HTML pages + search index│
+│ ├─ Typst 0.15 as a library (PDF, SVG, PNG, IDE)      │
+│ ├─ libgit2 (versions) + git CLI (sync)               │
+│ └─ embedded: templates, elements, Typst packages,    │
+│    fonts (Inter, JetBrains Mono), UI, site runtime   │
+└──────────────────────────────────────────────────────┘
 ```
 
-| Ordner | Inhalt |
+| Folder | Contents |
 | --- | --- |
-| `src/` | Rust-Backend (Server, Typst-World, Übersetzung, Exporte, Git, Bibliothek) |
-| `engine/` | Markdoc-Engine (TypeScript): Markdoc → Typst/HTML, Seitenrahmen, Suchindex |
-| `site/` | Laufzeit der exportierten HTML5-Site (Navigation, Suche, Scroll-Spy, Live-Vorschau) |
-| `web/` | Weboberfläche (React, CodeMirror 6) |
-| `assets/` | Vorlagen, Markdoc-Elemente, Typst-Pakete, Schriften |
+| `src/` | Rust backend (server, Typst world, translation, exports, Git, library) |
+| `engine/` | Markdoc engine (TypeScript): Markdoc → Typst/HTML, page shell, search index |
+| `site/` | Runtime of the exported HTML5 site (navigation, search, scroll spy, live preview) |
+| `web/` | Web interface (React, CodeMirror 6) |
+| `assets/` | Templates, Markdoc elements, Typst packages, fonts |
 
-## Entwicklung
+## Development
 
-Voraussetzungen: Rust ≥ 1.92, Node.js ≥ 20, ein C-Compiler (für QuickJS und libgit2).
+Requirements: Rust ≥ 1.92, Node.js ≥ 20 and a C compiler (for QuickJS and libgit2).
 
 ```bash
 npm install
@@ -166,61 +171,57 @@ npm run build            # engine, site, web
 cargo build --release    # target/release/sqritto
 ```
 
-Entwicklung mit Hot Reload: Backend mit `cargo run -- --no-open --token dev` starten und einmal http://localhost:4517/?token=dev öffnen (setzt das Anmelde-Cookie für `localhost`). Danach `npm run dev` – Vite unter http://localhost:5173 leitet `/api` und `/preview` an das Backend weiter. Im Debug-Build liest das Backend Vorlagen, Elemente und die UI direkt von der Platte.
+Development with hot reload: start the backend with `cargo run -- --no-open --token dev` and open http://localhost:4517/?token=dev once (this sets the login cookie for `localhost`). Then run `npm run dev` – Vite on http://localhost:5173 forwards `/api` and `/preview` to the backend. In debug builds the backend reads templates, elements and the UI straight from disk.
 
-Tests: `npm test` (Engine), `npm run typecheck` (Site und Oberfläche), `npm run i18n` (Übersetzungen der Oberfläche), `cargo test` (Backend).
+Tests: `npm test` (engine), `npm run typecheck` (site and interface), `npm run i18n` (interface translations), `cargo test` (backend).
 
-### Sprachen
+### Translations
 
-Sqritto gibt es auf Deutsch und Englisch. Die Sprache der Oberfläche folgt der Systemsprache und lässt sich unter „Einstellungen → Sprache“ umstellen; die Umgebungsvariable `SQRITTO_LANGUAGE` (`de`, `en`, `system`) hat Vorrang, z. B. für CI oder Screenshots. Alles, was in Dokumenten landet (Beschriftungen in PDF und HTML5-Site, Elemente, Datumsangaben), folgt dagegen der Dokumentsprache `lang` aus `sqritto.toml`; andere Sprachen als Deutsch erhalten englische Beschriftungen.
+- **Interface:** strings are written in German in the source and pass through `t('…')` (`web/src/lib/i18n.ts`), with placeholders as `{name}`. The English strings live in `web/src/i18n/en/*.ts`, one file per area, keyed by the German text. `npm run i18n` reports missing translations and composed strings; the pipeline checks this on every run.
+- **Server and command line:** `tr!("Deutsch", "English")` or `i18n::pick` (`src/i18n.rs`).
+- **Markdoc engine:** messages via `ui('Deutsch', 'English')`, site labels by document language (`engine/src/i18n.ts`).
+- **Elements and templates:** English texts in `component.json` under `"en"`; templates get `[template.en]` in `template.toml` and their own `files.en/` folder. Typst templates of elements pick their labels with `ts-i18n((de: …, en: …))` based on `text.lang`, HTML templates with `{{#docLang=en}}…{{/docLang=en}}`.
 
-- **Oberfläche:** Texte stehen auf Deutsch im Code und laufen durch `t('…')` (`web/src/lib/i18n.ts`), Platzhalter als `{name}`. Die englischen Texte liegen je Bereich in `web/src/i18n/en/*.ts` (Schlüssel = deutscher Text). `npm run i18n` meldet fehlende Übersetzungen und zusammengesetzte Texte; die Pipeline prüft das bei jedem Lauf.
-- **Server und Kommandozeile:** `tr!("Deutsch", "English")` bzw. `i18n::pick` (`src/i18n.rs`).
-- **Markdoc-Engine:** Meldungen über `ui('Deutsch', 'English')`, Beschriftungen der Site nach Dokumentsprache (`engine/src/i18n.ts`).
-- **Elemente und Vorlagen:** englische Texte in `component.json` unter `"en"`, Vorlagen mit `[template.en]` in `template.toml` und eigenem Ordner `files.en/`. In Typst-Vorlagen von Elementen wählt `ts-i18n((de: …, en: …))` nach `text.lang`, in HTML-Vorlagen `{{#docLang=en}}…{{/docLang=en}}`.
+### Building packages
 
-Mit `SQRITTO_CONFIG_DIR` läuft eine Instanz mit eigenem Einstellungsordner, getrennt von der installierten App (genutzt vom Rauchtest).
+`build.cmd` (Windows) and `build.sh` (Linux, macOS) build everything in one step and put the result into `dist/`:
 
-### Pakete bauen
-
-`build.cmd` (Windows) und `build.sh` (Linux, macOS) bauen alles in einem Schritt und legen das Ergebnis unter `dist/` ab:
-
-| Plattform | Ergebnis |
+| Platform | Result |
 | --- | --- |
-| Windows | `dist/Sqritto.exe`, Installer `dist/packages/Sqritto-X.Y.Z-windows-x64-setup.exe` (benötigt [Inno Setup 6](https://jrsoftware.org/isdl.php); ohne Installer: `build.cmd --no-installer`) |
-| Linux, macOS | `dist/sqritto`, Archiv `dist/packages/Sqritto-X.Y.Z-<plattform>-<arch>.tar.gz` |
+| Windows | `dist/Sqritto.exe`, installer `dist/packages/Sqritto-X.Y.Z-windows-x64-setup.exe` (requires [Inno Setup 6](https://jrsoftware.org/isdl.php); without installer: `build.cmd --no-installer`) |
+| Linux, macOS | `dist/sqritto`, archive `dist/packages/Sqritto-X.Y.Z-<platform>-<arch>.tar.gz` |
 
-Beigelegt werden `LICENSE.txt` (Apache-2.0), `LICENSE-MIT-0.txt` und `THIRD-PARTY-LICENSES.txt` mit den Lizenztexten aller eingebetteten Rust-Crates, npm-Pakete, Syntaxdefinitionen und Schriften (`node scripts/third-party-licenses.mjs`). `node scripts/smoke-test.mjs <programm>` prüft ein fertiges Programm von außen: `sqritto build` erzeugt aus der Vorlage „techdoc“ PDF und HTML5-Paket, `sqritto serve` liefert Oberfläche und API mit Zugangsschutz aus und kompiliert das Dokument.
+Included are `LICENSE.txt` (Apache-2.0), `LICENSE-MIT-0.txt` and `THIRD-PARTY-LICENSES.txt` with the license texts of all embedded Rust crates, npm packages, syntax definitions and fonts (`node scripts/third-party-licenses.mjs`). `node scripts/smoke-test.mjs <program>` checks a finished program from the outside: `sqritto build` creates a PDF and an HTML5 package from the “techdoc” template, and `sqritto serve` must serve the interface and the API with access protection and compile the document.
 
-Der Linux-Build braucht außer Rust und Node.js nur einen C-Compiler, `make` und `perl` (OpenSSL für Typst-Paket-Downloads wird statisch eingebunden). Unter Linux öffnet Sqritto die Oberfläche im Browser, unter Windows und macOS in einem eigenen Fenster.
+Apart from Rust and Node.js, the Linux build only needs a C compiler, `make` and `perl` (OpenSSL for Typst package downloads is linked statically). On Linux Sqritto opens its interface in the browser, on Windows and macOS in its own window.
 
-### GitHub Actions und Releases
+### GitHub Actions and releases
 
-`.github/workflows/build.yml` läuft bei Pushes, Pull Requests und manuell. Auf Windows x64, Linux x64 (Ubuntu 24.04) und macOS ARM64 werden Typprüfung, Frontend-Build, Engine-Tests, die Rust-Tests aller Targets und der Release-Build ausgeführt. Die Rust-Tests laufen mit `--release`, damit sie ihre kompilierten Abhängigkeiten (vor allem Typst) mit dem anschließenden Paket-Build teilen; ein Rust-Cache pro Plattform hält sie zwischen Läufen vor. Die Build-Skripte verwenden in CI mit `SQRITTO_FRONTEND_READY=1` das bereits gebaute Frontend.
+`.github/workflows/build.yml` runs on pushes, pull requests and manually. On Windows x64, Linux x64 (Ubuntu 24.04) and macOS ARM64 it runs the type check, the translation check, the frontend build, the engine tests, the Rust tests of all targets and the release build. The Rust tests run with `--release` so that they share their compiled dependencies (above all Typst) with the package build that follows; a Rust cache per platform keeps them between runs. In CI the build scripts reuse the already built frontend via `SQRITTO_FRONTEND_READY=1`.
 
-Anschließend wird das fertige Programm auf jeder Plattform mit dem Rauchtest geprüft. Unter Windows geschieht das am installierten Programm: Der Test installiert still in einen temporären Ordner, prüft Version und Dateien, führt den Rauchtest aus, installiert ein Update darüber und deinstalliert wieder. Die Pakete (Windows-Installer, Windows-ZIP, Linux- und macOS-Archiv) können bei jedem erfolgreichen Lauf als Workflow-Artefakte heruntergeladen werden.
+Afterwards the finished program is checked with the smoke test on every platform. On Windows this happens with the installed program: the test installs silently into a temporary folder, checks version and files, runs the smoke test, installs an update on top and uninstalls again. The packages (Windows installer, Windows ZIP, Linux and macOS archives) can be downloaded as workflow artifacts from every successful run.
 
-Für einen Release:
+To release:
 
-1. Neue Version setzen: `node scripts/version.mjs set X.Y.Z` (aktualisiert `Cargo.toml`, die `package.json` von engine, site und web sowie beide Lockdateien), dann committen.
-2. Tag erstellen und pushen, z. B. `git tag vX.Y.Z` und `git push origin main vX.Y.Z`.
-3. Nach erfolgreichen Builds aller Plattformen veröffentlicht die Pipeline automatisch einen GitHub-Release mit allen Paketen, SHA-256-Prüfsummen (`SHA256SUMS.txt`) und automatisch erzeugten Release Notes. Der Tag muss exakt zur Paketversion passen (`node scripts/version.mjs` prüft das). Zum Wiederholen eines fehlgeschlagenen Releases den Workflow des Tags erneut ausführen; Branch-Läufe veröffentlichen nie einen Release.
+1. Set the new version: `node scripts/version.mjs set X.Y.Z` (updates `Cargo.toml`, the `package.json` files of engine, site and web and both lock files), then commit.
+2. Create and push a tag, e.g. `git tag vX.Y.Z` and `git push origin main vX.Y.Z`.
+3. Once all platforms have built successfully, the pipeline publishes a GitHub release with all packages, SHA-256 checksums (`SHA256SUMS.txt`) and automatically generated release notes. The tag must match the package version exactly (`node scripts/version.mjs` checks this). To retry a failed release, re-run the workflow of the tag; branch runs never publish a release.
 
-Der Workflow braucht keine eigenen Secrets: nur der Release-Job erhält Schreibrechte über den eingebauten `GITHUB_TOKEN`. Die Programme sind nicht signiert; Windows SmartScreen und macOS Gatekeeper warnen deshalb beim ersten Start (macOS: Rechtsklick → Öffnen bzw. `xattr -d com.apple.quarantine sqritto`).
+The workflow needs no secrets of its own: only the release job gets write access, through the built-in `GITHUB_TOKEN`. The programs are not code-signed, so Windows SmartScreen and macOS Gatekeeper warn on first start (macOS: right-click → Open, or `xattr -d com.apple.quarantine sqritto`).
 
-## Lizenzen
+## Licenses
 
 Copyright © 2026 Johannes Asal.
 
-Das Programm steht unter der [Apache License 2.0](LICENSE). Alles, was in die Dokumente der Nutzer wandert, steht unter [MIT-0](LICENSE-MIT-0) und darf ohne Namensnennung verwendet, verändert und weitergegeben werden:
+The program is licensed under the [Apache License 2.0](LICENSE). Everything that ends up in users' documents is licensed under [MIT-0](LICENSE-MIT-0) and may be used, changed and shared without attribution:
 
-| Bereich | Lizenz |
+| Area | License |
 | --- | --- |
-| Programm: `src/`, `web/`, `engine/` (außer `engine/src/shell.ts`), Skripte | Apache-2.0 |
-| Dokumentvorlagen `assets/templates/`, Markdoc-Elemente `assets/components/`, Typst-Pakete `assets/typst/` | MIT-0 |
-| Laufzeit und Gestaltung der HTML5-Ausgabe `site/` sowie ihr Seitenrahmen `engine/src/shell.ts` | MIT-0 |
-| Schriften `assets/fonts/` (Inter, JetBrains Mono) | SIL Open Font License 1.1 |
+| Program: `src/`, `web/`, `engine/` (except `engine/src/shell.ts`), scripts | Apache-2.0 |
+| Document templates `assets/templates/`, Markdoc elements `assets/components/`, Typst packages `assets/typst/` | MIT-0 |
+| Runtime and styling of the HTML5 output `site/` and its page shell `engine/src/shell.ts` | MIT-0 |
+| Fonts `assets/fonts/` (Inter, JetBrains Mono) | SIL Open Font License 1.1 |
 
-Mit dem Programm erzeugte Dokumente (PDF, HTML5-Sites, erzeugte Typst-Quellen) gehören ihren Autorinnen und Autoren; soweit sie Bestandteile aus Vorlagen, Elementen oder der Site-Laufzeit enthalten, gilt dafür MIT-0. Ausgenommen sind die Bestandteile Dritter: die Icons von [Lucide](https://lucide.dev) (ISC, einzelne aus Feather unter MIT), die Farbschemata der Syntaxhervorhebung (InspiredGitHub und One Half, MIT), die Suchbibliothek MiniSearch (MIT) und die Schriften (OFL-1.1). Ihre Lizenztexte liegen jeder exportierten Site als `_static/LICENSES.txt` bei; die direkt in den Quelltext übernommenen stehen in [`third-party/`](third-party/README.md).
+Documents created with the program (PDFs, HTML5 sites, generated Typst sources) belong to their authors; where they contain parts of templates, elements or the site runtime, MIT-0 applies to those parts. Third-party components are excluded: the [Lucide](https://lucide.dev) icons (ISC, some from Feather under MIT), the syntax highlighting color schemes (InspiredGitHub and One Half, MIT), the MiniSearch search library (MIT) and the fonts (OFL-1.1). Their license texts ship with every exported site as `_static/LICENSES.txt`; those copied directly into the source tree are in [`third-party/`](third-party/README.md).
 
-Typst, Markdoc, CodeMirror und alle weiteren Bibliotheken stehen unter ihren eigenen Lizenzen; die vollständige Übersicht für Programmpakete erzeugt der Build als `dist/THIRD-PARTY-LICENSES.txt` (`node scripts/third-party-licenses.mjs`), einschließlich der eingebetteten Syntaxdefinitionen.
+Typst, Markdoc, CodeMirror and all other libraries are licensed under their own terms; the build generates a complete overview for the program packages as `dist/THIRD-PARTY-LICENSES.txt` (`node scripts/third-party-licenses.mjs`), including the embedded syntax definitions.
