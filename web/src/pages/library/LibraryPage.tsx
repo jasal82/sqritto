@@ -52,7 +52,7 @@ import { KindIcon, kindLabel } from '../common';
 
 type Filter = 'all' | 'markdoc' | 'typst';
 
-const QUICK = ['leer-markdoc', 'leer-typst', 'techdoc', 'arc42', 'brief-din5008', 'bericht'];
+const QUICK = ['leer-markdoc', 'leer-typst', 'brief-din5008', 'rechnung', 'bericht', 'techdoc'];
 
 export function LibraryPage() {
   const { settings, update, info } = useApp();

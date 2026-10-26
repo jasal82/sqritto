@@ -7,6 +7,6 @@ outputs = ["pdf"]
 order = 10
 
 [template.en]
-name = "Business letter (DIN 5008, German)"
-description = "German business letter following DIN 5008 with address field, reference block, fold marks and company details – fits German window envelopes. Content is in German."
+name = "Letter (DIN 5008)"
+description = "Letter following DIN 5008 with address field for window envelopes, reference block, fold marks and footer – for business and private correspondence."
 category = "Correspondence"

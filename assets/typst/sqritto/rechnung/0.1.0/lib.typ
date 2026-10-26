@@ -66,7 +66,7 @@
     steuernummer: "Tax no.",
     einleitung: [Dear Sir or Madam,
 
-    please find below our invoice for the services provided:],
+    Please find below our invoice for the services provided:],
     pos: "No.",
     beschreibung: "Description",
     menge: "Qty",
