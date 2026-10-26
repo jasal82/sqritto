@@ -1,11 +1,14 @@
 import {
+  AtSign,
   Bold,
   Code,
   Heading1,
   Heading2,
   Heading3,
+  ImageIcon,
   ImagePlus,
   Italic,
+  LayoutGrid,
   Link2,
   List,
   ListChecks,
@@ -13,15 +16,22 @@ import {
   Minus,
   Plus,
   Quote,
+  SeparatorHorizontal,
   Sigma,
+  Square,
   SquareCode,
   Strikethrough,
+  Superscript,
   Table2,
+  TableOfContents,
   AlignLeft,
+  Variable,
+  type LucideIcon,
 } from 'lucide-react';
-import { useMemo, useRef } from 'react';
+import { createElement, useMemo, useRef } from 'react';
 import type { EditorView } from '@codemirror/view';
 import * as cmd from '../../editor/commands';
+import { elementIcon } from '../../editor/elementIcons';
 import { componentSnippet } from '../../editor/markdoc';
 import { api } from '../../lib/api';
 import { t } from '../../lib/i18n';
@@ -31,16 +41,16 @@ import { getView, refreshTree, useEditor } from './store';
 import { relFrom } from './EditorArea';
 import { RichText } from '../common';
 
-const typstSnippets = (): { label: string; description: string; text: string }[] => [
-  { label: t('Abbildung'), description: t('Bild mit Beschriftung'), text: '#figure(\n  image("${/assets/bild.png}", width: 80%),\n  caption: [${Beschriftung}],\n) <${abb}>' },
-  { label: t('Tabelle'), description: t('Tabelle mit Kopfzeile'), text: '#table(\n  columns: 3,\n  table.header[*${A}*][*B*][*C*],\n  [1], [2], [3],\n)' },
-  { label: t('Raster'), description: t('Zweispaltiges Layout'), text: '#grid(\n  columns: (1fr, 1fr),\n  gutter: 1em,\n  [${Links}],\n  [Rechts],\n)' },
-  { label: t('Box mit Rahmen'), description: t('Hervorgehobener Block'), text: '#block(fill: luma(245), inset: 10pt, radius: 4pt)[\n  ${Inhalt}\n]' },
-  { label: t('Seitenumbruch'), description: '', text: '#pagebreak()' },
-  { label: t('Inhaltsverzeichnis'), description: '', text: '#outline()' },
-  { label: t('Fußnote'), description: '', text: '#footnote[${Text}]' },
-  { label: t('Verweis'), description: t('Auf Label verweisen'), text: '@${label}' },
-  { label: t('Variable'), description: t('let-Bindung'), text: '#let ${name} = ${wert}' },
+const typstSnippets = (): { label: string; description: string; icon: LucideIcon; text: string }[] => [
+  { label: t('Abbildung'), description: t('Bild mit Beschriftung'), icon: ImageIcon, text: '#figure(\n  image("${/assets/bild.png}", width: 80%),\n  caption: [${Beschriftung}],\n) <${abb}>' },
+  { label: t('Tabelle'), description: t('Tabelle mit Kopfzeile'), icon: Table2, text: '#table(\n  columns: 3,\n  table.header[*${A}*][*B*][*C*],\n  [1], [2], [3],\n)' },
+  { label: t('Raster'), description: t('Zweispaltiges Layout'), icon: LayoutGrid, text: '#grid(\n  columns: (1fr, 1fr),\n  gutter: 1em,\n  [${Links}],\n  [Rechts],\n)' },
+  { label: t('Box mit Rahmen'), description: t('Hervorgehobener Block'), icon: Square, text: '#block(fill: luma(245), inset: 10pt, radius: 4pt)[\n  ${Inhalt}\n]' },
+  { label: t('Seitenumbruch'), description: '', icon: SeparatorHorizontal, text: '#pagebreak()' },
+  { label: t('Inhaltsverzeichnis'), description: '', icon: TableOfContents, text: '#outline()' },
+  { label: t('Fußnote'), description: '', icon: Superscript, text: '#footnote[${Text}]' },
+  { label: t('Verweis'), description: t('Auf Label verweisen'), icon: AtSign, text: '@${label}' },
+  { label: t('Variable'), description: t('let-Bindung'), icon: Variable, text: '#let ${name} = ${wert}' },
 ];
 
 export function Toolbar({ flavor }: { flavor: cmd.Flavor }) {
@@ -171,6 +181,7 @@ export function Toolbar({ flavor }: { flavor: cmd.Flavor }) {
                   {list.map((c) => (
                     <MenuItem
                       key={c.name}
+                      icon={createElement(elementIcon(c))}
                       description={c.description ? <RichText text={c.description} /> : undefined}
                       onSelect={() => {
                         const v = getView();
@@ -185,6 +196,7 @@ export function Toolbar({ flavor }: { flavor: cmd.Flavor }) {
             : typstSnippets().map((s) => (
                 <MenuItem
                   key={s.label}
+                  icon={createElement(s.icon)}
                   description={s.description || undefined}
                   onSelect={() => {
                     const v = getView();

@@ -18,8 +18,10 @@ import type { Extension } from '@codemirror/state';
 import type { EditorView } from '@codemirror/view';
 import { tags } from '@lezer/highlight';
 import type { BlockContext, InlineContext, Line, MarkdownConfig } from '@lezer/markdown';
+import type { LucideIcon } from 'lucide-react';
 import { t } from '../lib/i18n';
 import type { ComponentDef, Heading } from '../lib/types';
+import { elementIcon, iconMarkup, tagIcon } from './elementIcons';
 
 // ---------------------------------------------------------------------------
 // Grammatik
@@ -122,19 +124,51 @@ export interface MarkdocContext {
   currentPath: () => string;
 }
 
+/** Vorschlag mit eigenem Symbol (lucide) statt des Standardsymbols. */
+interface IconCompletion extends Completion {
+  icon?: LucideIcon;
+}
+
 const BUILTIN_TAGS: Completion[] = [
-  tagCompletion('if', `{% if \${$${t('bedingung')}} %}\n\${}\n{% /if %}`, { detail: t('Bedingung'), type: 'keyword' }),
-  tagCompletion('else', '{% else /%}', { detail: t('Alternative in if'), type: 'keyword' }),
-  tagCompletion('partial', `{% partial file="\${partials/${t('datei')}.mdoc}" /%}`, { detail: t('Baustein einbinden'), type: 'keyword' }),
+  tagCompletion('if', `{% if \${$${t('bedingung')}} %}\n\${}\n{% /if %}`, { detail: t('Bedingung'), type: 'keyword', icon: tagIcon('if') }),
+  tagCompletion('else', '{% else /%}', { detail: t('Alternative in if'), type: 'keyword', icon: tagIcon('else') }),
+  tagCompletion('partial', `{% partial file="\${partials/${t('datei')}.mdoc}" /%}`, {
+    detail: t('Baustein einbinden'),
+    type: 'keyword',
+    icon: tagIcon('partial'),
+  }),
   tagCompletion(
     'table',
     `{% table %}\n* ${t('Spalte {n}', { n: 'A' })}\n* ${t('Spalte {n}', { n: 'B' })}\n---\n* \${${t('Wert')}}\n* ${t('Wert')}\n{% /table %}`,
     {
       detail: t('Tabelle (Listenform)'),
       type: 'keyword',
+      icon: tagIcon('table'),
     },
   ),
 ];
+
+/**
+ * Symbol vor jedem Vorschlag. Ersetzt das Standardsymbol von CodeMirror
+ * (`icons: false`): Elemente und Tags erhalten ihr lucide-Symbol, alle übrigen
+ * Vorschläge (Attribute, Werte, Links …) behalten das Zeichen ihres Typs.
+ */
+const completionIcon = {
+  position: 20,
+  render(completion: Completion): Node {
+    const el = document.createElement('div');
+    el.className = 'cm-completionIcon';
+    el.setAttribute('aria-hidden', 'true');
+    const icon = (completion as IconCompletion).icon;
+    if (icon) {
+      el.classList.add('cm-completionIcon-lucide');
+      el.innerHTML = iconMarkup(icon);
+    } else if (completion.type) {
+      el.classList.add(...completion.type.split(/\s+/).filter(Boolean).map((c) => `cm-completionIcon-${c}`));
+    }
+    return el;
+  },
+};
 
 /**
  * Vervollständigung eines Tagnamens. Eingefügt wird immer der vollständige
@@ -142,7 +176,7 @@ const BUILTIN_TAGS: Completion[] = [
  * Abschluss (`}` von der automatischen Klammer, `%}`) werden ersetzt. Steht
  * der Tag schon mit Attributen da, wird nur der Name ausgetauscht.
  */
-function tagCompletion(name: string, template: string, opts: Omit<Completion, 'label' | 'apply'>): Completion {
+function tagCompletion(name: string, template: string, opts: Omit<IconCompletion, 'label' | 'apply'>): IconCompletion {
   const insertSnippet = snippet(template);
   return {
     ...opts,
@@ -209,10 +243,13 @@ function markdocCompletions(ctx: MarkdocContext) {
       if (nameM) {
         if (nameM[1]) {
           // schließendes Tag: offene Tags vorschlagen
-          const names = [...ctx.components().map((c) => c.name), 'if', 'table'];
+          const names = [
+            ...ctx.components().map((c) => ({ name: c.name, icon: elementIcon(c) })),
+            ...['if', 'table'].map((name) => ({ name, icon: tagIcon(name) })),
+          ];
           return {
             from: cx.pos - nameM[2].length,
-            options: names.map((n) => tagCompletion(n, `{% /${n} %}`, { type: 'type' })),
+            options: names.map(({ name, icon }) => tagCompletion(name, `{% /${name} %}`, { type: 'type', icon })),
             validFor: /^[\w-]*$/,
           };
         }
@@ -222,6 +259,7 @@ function markdocCompletions(ctx: MarkdocContext) {
               detail: c.title ?? undefined,
               info: c.description ?? undefined,
               type: c.source === 'local' ? 'class' : 'type',
+              icon: elementIcon(c),
               boost: 2,
             }),
           ),
@@ -308,7 +346,7 @@ export function markdocLanguage(ctx: MarkdocContext): Extension[] {
   return [
     markdown({ base: markdownLanguage, codeLanguages: languages, extensions: [markdocExtension] }),
     markdownLanguage.data.of({ autocomplete: markdocCompletions(ctx) }),
-    autocompletion({ activateOnTyping: true, icons: true, maxRenderedOptions: 80 }),
+    autocompletion({ activateOnTyping: true, icons: false, addToOptions: [completionIcon], maxRenderedOptions: 80 }),
   ];
 }
 

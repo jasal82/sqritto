@@ -77,6 +77,10 @@ export const editorTheme = EditorView.theme({
     color: 'var(--fg-muted)',
   },
   '.cm-completionIcon': { opacity: '.7', width: '1.2em', paddingRight: '.8em' },
+  // lucide-Symbole (Elemente, Tags) wie in den Menüs
+  '.cm-completionIcon-lucide': { opacity: '1', color: 'var(--fg-subtle)', verticalAlign: '-3px' },
+  '.cm-completionIcon-lucide svg': { display: 'block', width: '15px', height: '15px' },
+  '.cm-tooltip-autocomplete ul li[aria-selected] .cm-completionIcon-lucide': { color: 'var(--fg-muted)' },
   '.cm-panels': { backgroundColor: 'var(--bg-subtle)', color: 'var(--fg)' },
   '.cm-panels.cm-panels-top': { borderBottom: '1px solid var(--border)' },
   '.cm-panels.cm-panels-bottom': { borderTop: '1px solid var(--border)' },
