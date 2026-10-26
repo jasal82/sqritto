@@ -11,9 +11,21 @@ $installDir = Join-Path ([IO.Path]::GetTempPath()) ("sqritto-installer-test-" + 
 $arguments = @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', "/DIR=`"$installDir`"")
 $uninstallKey = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\{532A3587-2FB0-436A-B81B-F1EB5FE2A53F}_is1'
 
+# Wartet mit Zeitlimit nur auf den Prozess selbst (Start-Process -Wait wartet ohne Limit auch
+# auf alle Nachfahren) und liefert seinen Exitcode.
+function Wait-Exit([Diagnostics.Process]$process, [string]$label, [int]$seconds = 300) {
+    $null = $process.Handle # hält den Exitcode nach WaitForExit lesbar
+    if (!$process.WaitForExit($seconds * 1000)) {
+        Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+        throw "$label ist nach $seconds s nicht fertig geworden."
+    }
+    $process.ExitCode
+}
+
 function Install([string]$label) {
-    $setup = Start-Process -FilePath $installer -ArgumentList $arguments -WindowStyle Hidden -PassThru -Wait
-    if ($setup.ExitCode -ne 0) { throw "$label fehlgeschlagen (Exitcode $($setup.ExitCode))." }
+    $setup = Start-Process -FilePath $installer -ArgumentList $arguments -WindowStyle Hidden -PassThru
+    $exitCode = Wait-Exit $setup $label
+    if ($exitCode -ne 0) { throw "$label fehlgeschlagen (Exitcode $exitCode)." }
     foreach ($name in 'Sqritto.exe', 'LICENSE.txt', 'LICENSE-MIT-0.txt', 'THIRD-PARTY-LICENSES.txt', 'unins000.exe') {
         if (!(Test-Path -LiteralPath "$installDir/$name")) { throw "$label`: $name fehlt im Programmordner." }
     }
@@ -56,9 +68,8 @@ foreach ($name in $relaunchEnv.Keys) {
 }
 try {
     $setup = Start-Process -FilePath $installer -ArgumentList ($arguments + '/RELAUNCH=1') -WindowStyle Hidden -PassThru
-    $null = $setup.Handle # hält den Exitcode nach WaitForExit lesbar
-    if (!$setup.WaitForExit(300000)) { throw 'Update mit Neustart wurde nicht fertig.' }
-    if ($setup.ExitCode -ne 0) { throw "Update mit Neustart fehlgeschlagen (Exitcode $($setup.ExitCode))." }
+    $exitCode = Wait-Exit $setup 'Update mit Neustart'
+    if ($exitCode -ne 0) { throw "Update mit Neustart fehlgeschlagen (Exitcode $exitCode)." }
     $info = $null
     for ($i = 0; $i -lt 60 -and !$info; $i++) {
         try {
@@ -78,8 +89,9 @@ try {
     foreach ($name in $savedEnv.Keys) { [Environment]::SetEnvironmentVariable($name, $savedEnv[$name]) }
 }
 
-$uninstall = Start-Process -FilePath "$installDir/unins000.exe" -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -WindowStyle Hidden -PassThru -Wait
-if ($uninstall.ExitCode -ne 0) { throw "Deinstallation fehlgeschlagen (Exitcode $($uninstall.ExitCode))." }
+$uninstall = Start-Process -FilePath "$installDir/unins000.exe" -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -WindowStyle Hidden -PassThru
+$exitCode = Wait-Exit $uninstall 'Deinstallation'
+if ($exitCode -ne 0) { throw "Deinstallation fehlgeschlagen (Exitcode $exitCode)." }
 # Das Deinstallationsprogramm entfernt sich verzögert selbst.
 for ($i = 0; $i -lt 20 -and (Test-Path -LiteralPath "$installDir/Sqritto.exe"); $i++) { Start-Sleep -Milliseconds 500 }
 if (Test-Path -LiteralPath "$installDir/Sqritto.exe") { throw 'Die Deinstallation hat Sqritto.exe nicht entfernt.' }

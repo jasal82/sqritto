@@ -116,7 +116,10 @@ try {
   await testBuild();
   await testServer();
   console.log('Rauchtest bestanden.');
-  fs.rmSync(work, { recursive: true, force: true });
+  fs.rmSync(work, { recursive: true, force: true, maxRetries: 5 });
+  // Ausdrücklich beenden: Offene Pipes eines eben beendeten Servers dürfen den
+  // Aufrufer (Installer-Test, CI) nicht warten lassen.
+  process.exit(0);
 } catch (error) {
   console.error(`Rauchtest fehlgeschlagen: ${error.message}\nArbeitsordner: ${work}`);
   process.exit(1);

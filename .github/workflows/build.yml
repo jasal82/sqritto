@@ -82,6 +82,8 @@ jobs:
         run: build.cmd
       - name: Test Windows installer and installed program
         if: runner.os == 'Windows'
+        # Normal unter einer Minute; ein hängender Prozess soll nicht bis zum Job-Limit blockieren.
+        timeout-minutes: 15
         shell: pwsh
         run: ./scripts/test-installer.ps1
       - name: Package Windows portable program
