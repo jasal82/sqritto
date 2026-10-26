@@ -76,6 +76,15 @@ base64 = "0.22"
 ecow = "0.2.6"
 comemo = "0.5.1"
 
+# Selbst-Update aus den GitHub-Releases – dieselben Bibliotheken wie die
+# Typst-Paket-Downloads (System-TLS, Proxy aus der Umgebung)
+ureq = { version = "2", default-features = false, features = ["native-tls", "gzip", "json"] }
+native-tls = "0.2"
+env_proxy = "0.4"
+sha2 = "0.10"
+tar = "0.4"
+flate2 = "1"
+
 # Natives App-Fenster (WebView2 unter Windows, WKWebView unter macOS)
 [target.'cfg(any(windows, target_os = "macos"))'.dependencies]
 tao = { version = "0.37", default-features = false, features = ["rwh_06"] }

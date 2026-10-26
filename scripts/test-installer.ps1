@@ -32,6 +32,52 @@ if ($LASTEXITCODE -ne 0) { throw 'Rauchtest des installierten Programms fehlgesc
 
 Install 'Update über bestehende Installation'
 
+# Selbst-Update (src/update.rs): Das von Sqritto gestartete Setup startet das Programm wieder, das
+# Port und Zugangstoken der vorigen Version aus der Umgebung übernimmt. SQRITTO_NO_OPEN hält den
+# Test unsichtbar. Nicht mit -Wait: Das wartet auch auf alle Nachfahren, also auf das neu
+# gestartete Programm.
+$listener = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback, 0)
+$listener.Start()
+$port = $listener.LocalEndpoint.Port
+$listener.Stop()
+$token = [guid]::NewGuid().ToString('N')
+$relaunchWork = Join-Path ([IO.Path]::GetTempPath()) ("sqritto-relaunch-test-" + [guid]::NewGuid())
+$relaunchEnv = @{
+    SQRITTO_RESTART_PORT = "$port"
+    SQRITTO_RESTART_TOKEN = $token
+    SQRITTO_NO_OPEN = '1'
+    SQRITTO_CONFIG_DIR = Join-Path $relaunchWork 'config'
+    SQRITTO_WORKSPACE = Join-Path $relaunchWork 'workspace'
+}
+$savedEnv = @{}
+foreach ($name in $relaunchEnv.Keys) {
+    $savedEnv[$name] = [Environment]::GetEnvironmentVariable($name)
+    [Environment]::SetEnvironmentVariable($name, $relaunchEnv[$name])
+}
+try {
+    $setup = Start-Process -FilePath $installer -ArgumentList ($arguments + '/RELAUNCH=1') -WindowStyle Hidden -PassThru
+    $null = $setup.Handle # hält den Exitcode nach WaitForExit lesbar
+    if (!$setup.WaitForExit(300000)) { throw 'Update mit Neustart wurde nicht fertig.' }
+    if ($setup.ExitCode -ne 0) { throw "Update mit Neustart fehlgeschlagen (Exitcode $($setup.ExitCode))." }
+    $info = $null
+    for ($i = 0; $i -lt 60 -and !$info; $i++) {
+        try {
+            $info = Invoke-RestMethod "http://127.0.0.1:$port/api/info" -Headers @{ Authorization = "Bearer $token" } -TimeoutSec 2
+        } catch { Start-Sleep -Seconds 1 }
+    }
+    # Über den Port gefunden: Der Programmpfad kann in der kurzen 8.3-Form angegeben sein.
+    $owner = (Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue).OwningProcess | Select-Object -First 1
+    if ($owner) {
+        Stop-Process -Id $owner
+        Wait-Process -Id $owner -ErrorAction SilentlyContinue
+    }
+    if (!$info) { throw 'Das Setup hat Sqritto nach /RELAUNCH nicht wieder gestartet (oder Port/Token nicht übernommen).' }
+    if ($info.version -ne $version) { throw "Nach dem Neustart läuft Version $($info.version) statt $version." }
+    Write-Host '  ok  Neustart nach dem Update (/RELAUNCH, Port und Token übernommen)'
+} finally {
+    foreach ($name in $savedEnv.Keys) { [Environment]::SetEnvironmentVariable($name, $savedEnv[$name]) }
+}
+
 $uninstall = Start-Process -FilePath "$installDir/unins000.exe" -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -WindowStyle Hidden -PassThru -Wait
 if ($uninstall.ExitCode -ne 0) { throw "Deinstallation fehlgeschlagen (Exitcode $($uninstall.ExitCode))." }
 # Das Deinstallationsprogramm entfernt sich verzögert selbst.

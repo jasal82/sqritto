@@ -19,6 +19,8 @@ pub enum UserEvent {
     Ipc(String),
     Focus,
     Title(String),
+    /// Ein Update ist installiert: beenden, die neue Version startet von selbst.
+    Quit,
 }
 
 pub struct Desktop {
@@ -64,6 +66,14 @@ impl Desktop {
         let proxy = Mutex::new(self.event_loop.create_proxy());
         Arc::new(move || {
             let _ = proxy.lock().send_event(UserEvent::Focus);
+        })
+    }
+
+    /// Rückruf, mit dem sich die App für ein Update beendet (wie beim Schließen).
+    pub fn quit_handle(&self) -> Arc<dyn Fn() + Send + Sync> {
+        let proxy = Mutex::new(self.event_loop.create_proxy());
+        Arc::new(move || {
+            let _ = proxy.lock().send_event(UserEvent::Quit);
         })
     }
 
@@ -163,6 +173,11 @@ impl Desktop {
                     window.set_focus();
                 }
                 Event::UserEvent(UserEvent::Title(t)) => window.set_title(&t),
+                Event::UserEvent(UserEvent::Quit) => {
+                    save_state(&window, normal, &state_file);
+                    on_exit();
+                    *control_flow = ControlFlow::Exit;
+                }
                 _ => {}
             }
         })

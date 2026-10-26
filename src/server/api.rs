@@ -24,6 +24,7 @@ use crate::library::CreateRequest;
 use crate::manifest::{DocKind, patch_manifest};
 use crate::project::{Document, safe_join};
 use crate::templates;
+use crate::update;
 
 pub fn router() -> Router<AppState> {
     Router::new()
@@ -37,6 +38,9 @@ pub fn router() -> Router<AppState> {
         .route("/system/reveal", post(reveal))
         .route("/system/reveal-file", post(reveal_file))
         .route("/system/focus", post(focus))
+        .route("/update", get(update_status))
+        .route("/update/check", post(update_check))
+        .route("/update/install", post(update_install))
         .route("/documents/{id}/export/{format}/save", post(export_save))
         .route("/documents/{id}/export/pdf/open", post(export_open_pdf))
         .route("/templates", get(list_templates).post(save_template))
@@ -160,6 +164,34 @@ async fn focus(State(s): State<AppState>) -> ApiResult<Json<Json_>> {
         f();
     }
     Ok(Json(json!({ "ok": true })))
+}
+
+// ---------------------------------------------------------------------------
+// Updates (nur lokale App, siehe crate::update)
+// ---------------------------------------------------------------------------
+
+async fn update_status() -> Json<update::UpdateStatus> {
+    Json(update::status())
+}
+
+fn local_app_only() -> ApiResult<()> {
+    if update::enabled() {
+        Ok(())
+    } else {
+        Err(ApiError(StatusCode::FORBIDDEN, tr!("Nur in der lokalen App verfügbar.", "Only available in the local app.")))
+    }
+}
+
+async fn update_check() -> ApiResult<Json<update::UpdateStatus>> {
+    local_app_only()?;
+    blocking(|| Ok(update::check())).await.map(Json)
+}
+
+/// Startet die Installation im Hintergrund; die Seite verfolgt sie über `GET /api/update`.
+async fn update_install() -> ApiResult<Json<update::UpdateStatus>> {
+    local_app_only()?;
+    update::start_install().map_err(|e| ApiError(StatusCode::BAD_REQUEST, e))?;
+    Ok(Json(update::status()))
 }
 
 #[derive(Deserialize)]

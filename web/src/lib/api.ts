@@ -15,6 +15,7 @@ import type {
   RepoStatus,
   TemplateInfo,
   UniverseTemplate,
+  UpdateStatus,
 } from './types';
 import { t } from './i18n';
 
@@ -71,6 +72,11 @@ export const api = {
   settings: () => get<Record<string, unknown>>('/api/settings'),
   saveSettings: (s: unknown) => put<Record<string, unknown>>('/api/settings', s),
   fonts: () => get<string[]>('/api/fonts'),
+  update: {
+    status: () => get<UpdateStatus>('/api/update'),
+    check: () => post<UpdateStatus>('/api/update/check'),
+    install: () => post<UpdateStatus>('/api/update/install'),
+  },
   pickFolder: () => post<{ path: string | null }>('/api/system/pick-folder'),
   reveal: (id: string, path?: string) => post('/api/system/reveal', { id, path }),
   revealFile: (path: string) => post('/api/system/reveal-file', { path }),

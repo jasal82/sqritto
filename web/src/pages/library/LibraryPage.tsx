@@ -48,6 +48,7 @@ import { NewDocumentDialog } from './NewDocumentDialog';
 import { WindowControls } from '../../ui/WindowControls';
 import { titleBarMouseDown } from '../../lib/desktop';
 import { SettingsDialog } from '../SettingsDialog';
+import { useUpdateNotice } from '../UpdateSection';
 import { KindIcon, kindLabel } from '../common';
 
 type Filter = 'all' | 'markdoc' | 'typst';
@@ -63,7 +64,13 @@ export function LibraryPage() {
   const [newOpen, setNewOpen] = useState(false);
   const [newTemplate, setNewTemplate] = useState<string | undefined>();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsSection, setSettingsSection] = useState<'updates' | undefined>();
   const searchRef = useRef<HTMLInputElement>(null);
+  const openUpdates = useCallback(() => {
+    setSettingsSection('updates');
+    setSettingsOpen(true);
+  }, []);
+  const updateAvailable = useUpdateNotice(openUpdates);
 
   const load = useCallback(async () => {
     try {
@@ -177,7 +184,12 @@ export function LibraryPage() {
           {!query && <Kbd keys="Mod K" />}
         </div>
         <div className="lib-header__actions">
-          <IconButton label={t('Einstellungen')} onClick={() => setSettingsOpen(true)} size="md">
+          <IconButton
+            label={updateAvailable ? t('Einstellungen · Update verfügbar') : t('Einstellungen')}
+            onClick={() => (updateAvailable ? openUpdates() : setSettingsOpen(true))}
+            size="md"
+            className={updateAvailable ? 'has-dot' : undefined}
+          >
             <Settings2 />
           </IconButton>
           <Tip label={info?.mode === 'local' ? t('Vorhandenen Ordner öffnen') : t('Ordner im Arbeitsbereich hinzufügen')}>
@@ -333,7 +345,14 @@ export function LibraryPage() {
         onCreated={(doc) => navigate(routes.editor(doc.id))}
         onTemplatesChanged={() => api.templates().then(setTemplates)}
       />
-      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
+      <SettingsDialog
+        open={settingsOpen}
+        section={settingsSection}
+        onOpenChange={(open) => {
+          setSettingsOpen(open);
+          if (!open) setSettingsSection(undefined);
+        }}
+      />
     </div>
   );
 }

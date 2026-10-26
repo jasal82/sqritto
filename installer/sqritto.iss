@@ -53,3 +53,12 @@ Name: "{autodesktop}\Sqritto"; Filename: "{app}\Sqritto.exe"; WorkingDir: "{app}
 
 [Run]
 Filename: "{app}\Sqritto.exe"; Description: "{cm:LaunchProgram,Sqritto}"; Flags: nowait postinstall skipifsilent
+; Selbst-Update (src/update.rs): /RELAUNCH=1 startet das aktualisierte Programm wieder.
+; Es erbt die Umgebung des Setups und damit Port und Zugangstoken der vorigen Version.
+Filename: "{app}\Sqritto.exe"; Flags: nowait; Check: Relaunch
+
+[Code]
+function Relaunch: Boolean;
+begin
+  Result := ExpandConstant('{param:relaunch|}') <> '';
+end;

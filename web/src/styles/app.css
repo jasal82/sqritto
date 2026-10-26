@@ -791,6 +791,150 @@ body.is-resizing .resizer:active {
   word-break: break-all;
 }
 
+/* Updates (pages/UpdateSection.tsx) */
+.update__current {
+  display: grid;
+  gap: 1px;
+}
+.update__current strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+.update__current small {
+  color: var(--fg-subtle);
+  font-size: 12px;
+  font-weight: 400;
+}
+.update__message {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 4px 0 6px;
+  font-size: 13px;
+}
+.update__message svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+}
+.update__message--ok {
+  color: var(--success-fg);
+}
+.update__message--warning {
+  color: var(--warning-fg);
+}
+.update__message--error {
+  color: var(--danger-fg);
+}
+.update__card {
+  display: grid;
+  gap: 10px;
+  margin: 6px 0 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+}
+.update__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.update__date {
+  color: var(--fg-subtle);
+  font-size: 12.5px;
+}
+.update__notes {
+  display: grid;
+  gap: 3px;
+  max-height: 200px;
+  overflow: auto;
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+}
+.update__notes strong {
+  margin-top: 4px;
+  color: var(--fg);
+  font-weight: 600;
+}
+.update__notes strong:first-child {
+  margin-top: 0;
+}
+.update__item {
+  position: relative;
+  padding-left: 14px;
+  color: var(--fg-muted);
+}
+.update__item::before {
+  position: absolute;
+  left: 3px;
+  content: "•";
+}
+.update__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.update__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+}
+.update__link:hover {
+  text-decoration: underline;
+}
+.update-progress {
+  display: grid;
+  gap: 10px;
+  font-size: 13.5px;
+}
+.update-progress small {
+  color: var(--fg-subtle);
+  font-size: 12px;
+}
+.update-progress__step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.update-progress__step .spinner {
+  flex: none;
+}
+.update-progress__bar {
+  overflow: hidden;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-muted);
+}
+.update-progress__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 300ms var(--ease-out);
+}
+
+/* Punkt am Knopf, z. B. „Update verfügbar“ am Einstellungsknopf */
+.btn.has-dot {
+  position: relative;
+}
+.btn.has-dot::after {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--bg);
+  content: "";
+}
+
 /* ------------------------------------------------------------------ */
 /* Natives App-Fenster: Kopfleisten dienen als Titelleiste             */
 /* ------------------------------------------------------------------ */

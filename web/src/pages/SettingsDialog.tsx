@@ -1,11 +1,27 @@
 import { Monitor, Moon, Sun } from 'lucide-react';
+import { useEffect } from 'react';
 import { t } from '../lib/i18n';
 import { useApp } from '../lib/store';
 import type { Settings } from '../lib/types';
 import { Dialog, Segmented, SwitchRow } from '../ui';
+import { UpdateSection } from './UpdateSection';
 
-export function SettingsDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+export function SettingsDialog({
+  open,
+  onOpenChange,
+  section,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  /** Bereich, zu dem beim Öffnen gescrollt wird. */
+  section?: 'updates';
+}) {
   const { settings, update, setLanguage, info } = useApp();
+  useEffect(() => {
+    if (!open || !section) return;
+    const timer = window.setTimeout(() => document.getElementById(`settings-${section}`)?.scrollIntoView({ block: 'start' }), 50);
+    return () => window.clearTimeout(timer);
+  }, [open, section]);
   return (
     <Dialog open={open} onOpenChange={onOpenChange} title={t('Einstellungen')} description={t('Gelten für alle Dokumente auf diesem Gerät.')} size="md">
       <div className="dialog__body settings">
@@ -109,6 +125,8 @@ export function SettingsDialog({ open, onOpenChange }: { open: boolean; onOpenCh
             </p>
           )}
         </section>
+
+        <UpdateSection />
 
         {info && (
           <section className="settings__section settings__about">

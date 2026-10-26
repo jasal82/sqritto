@@ -90,17 +90,33 @@ pub struct ServerConfig {
     pub focus: Option<Callback>,
     /// Beenden, wenn keine Oberfläche mehr verbunden ist (Browser-Modus).
     pub idle_exit: Option<IdleExit>,
+    /// Nach einem Update: warten, bis die vorige Version den Port freigibt.
+    pub wait_for_port: bool,
 }
 
 pub struct IdleExit {
     /// Erst aktiv, wenn gesetzt (im nativen Fenster bleibt es aus).
     pub armed: Arc<std::sync::atomic::AtomicBool>,
     pub on_exit: Callback,
+    /// Nach einem Update: Die offene Seite verbindet sich gleich neu – bleibt
+    /// sie aus, endet die App wie nach dem Schließen des letzten Fensters.
+    pub reconnect: bool,
 }
 
 pub async fn bind(cfg: &ServerConfig) -> anyhow::Result<(tokio::net::TcpListener, SocketAddr)> {
     let addr = format!("{}:{}", cfg.host, cfg.port);
-    let listener = match tokio::net::TcpListener::bind(&addr).await {
+    // Die vorige Version beendet sich gerade; ihr Port wird gleich frei (höchstens 30 s warten).
+    let mut attempts = if cfg.wait_for_port { 120 } else { 0 };
+    let bound = loop {
+        match tokio::net::TcpListener::bind(&addr).await {
+            Err(e) if e.kind() == std::io::ErrorKind::AddrInUse && attempts > 0 => {
+                attempts -= 1;
+                tokio::time::sleep(std::time::Duration::from_millis(250)).await;
+            }
+            result => break result,
+        }
+    };
+    let listener = match bound {
         Ok(l) => l,
         Err(e) if cfg.local => {
             tracing::warn!("Port {} belegt ({e}), wähle freien Port", cfg.port);
@@ -126,12 +142,12 @@ pub async fn serve(cfg: ServerConfig, listener: tokio::net::TcpListener) -> anyh
             clients: AtomicUsize::new(0),
         }),
     };
-    if let Some(IdleExit { armed, on_exit: on_idle }) = cfg.idle_exit {
+    if let Some(IdleExit { armed, on_exit: on_idle, reconnect }) = cfg.idle_exit {
         // Ohne eigenes Fenster endet die App, sobald kein Browserfenster mehr
         // verbunden ist (kurze Unterbrechungen wie Neuladen werden toleriert).
         let inner = state.inner.clone();
         tokio::spawn(async move {
-            let mut seen = false;
+            let mut seen = reconnect;
             let mut idle = 0u32;
             loop {
                 tokio::time::sleep(std::time::Duration::from_secs(2)).await;

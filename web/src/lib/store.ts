@@ -14,6 +14,8 @@ export const DEFAULT_SETTINGS: Settings = {
   syncScroll: true,
   libraryView: 'grid',
   librarySort: 'modified',
+  updateCheck: true,
+  skippedVersion: '',
 };
 
 interface AppState {

@@ -117,6 +117,7 @@ export function Dialog({
   size,
   className,
   initialFocus,
+  locked,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -127,6 +128,8 @@ export function Dialog({
   size?: 'md' | 'wide';
   className?: string;
   initialFocus?: React.RefObject<HTMLElement | null>;
+  /** Lässt sich nicht schließen (kein Schließen-Knopf, kein Escape, kein Klick daneben). */
+  locked?: boolean;
 }) {
   return (
     <RDialog.Root open={open} onOpenChange={onOpenChange}>
@@ -150,6 +153,9 @@ export function Dialog({
             }
           }}
           aria-describedby={description ? undefined : undefined}
+          onEscapeKeyDown={locked ? (e) => e.preventDefault() : undefined}
+          onPointerDownOutside={locked ? (e) => e.preventDefault() : undefined}
+          onInteractOutside={locked ? (e) => e.preventDefault() : undefined}
         >
           <div className="dialog__header">
             <div>
@@ -160,11 +166,13 @@ export function Dialog({
                 <RDialog.Description className="sr-only">{typeof title === 'string' ? title : ''}</RDialog.Description>
               )}
             </div>
-            <RDialog.Close asChild>
-              <Button variant="ghost" size="sm" iconOnly className="dialog__close" aria-label={t('Schließen')}>
-                <X />
-              </Button>
-            </RDialog.Close>
+            {!locked && (
+              <RDialog.Close asChild>
+                <Button variant="ghost" size="sm" iconOnly className="dialog__close" aria-label={t('Schließen')}>
+                  <X />
+                </Button>
+              </RDialog.Close>
+            )}
           </div>
           {children}
           {footer && <div className="dialog__footer">{footer}</div>}

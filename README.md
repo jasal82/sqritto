@@ -31,7 +31,7 @@ Starts the local app in its own window. Starting it a second time brings the ope
 | `sqritto build ./handbook` | Build the PDF (and the HTML ZIP) into `./handbook/dist/` |
 | `sqritto build ./handbook --pdf out.pdf --html site.zip --typst out.typ` | Produce specific outputs; exits with an error code if the document contains errors |
 
-Environment variables: `SQRITTO_WORKSPACE`, `SQRITTO_HOST`, `SQRITTO_PORT`, `SQRITTO_TOKEN`, `SQRITTO_LANGUAGE` (`de`, `en` or `system`) and `SQRITTO_CONFIG_DIR` (a separate settings folder, e.g. for tests).
+Environment variables: `SQRITTO_WORKSPACE`, `SQRITTO_HOST`, `SQRITTO_PORT`, `SQRITTO_TOKEN`, `SQRITTO_LANGUAGE` (`de`, `en` or `system`), `SQRITTO_CONFIG_DIR` (a separate settings folder, e.g. for tests), `SQRITTO_NO_OPEN` (same as `--no-open`) and `SQRITTO_UPDATE_URL` (a different address for the update check, see [Updates](#updates)).
 
 On Windows, `sqritto.exe` is a GUI program. When started from a terminal it still writes its output to that terminal, but the terminal does not wait for it to finish – in scripts use `sqritto build … | Out-Default` (PowerShell) or `start /wait sqritto build …` (cmd). In CI pipelines with redirected output nothing else is needed.
 
@@ -135,6 +135,17 @@ Packages from [Typst Universe](https://typst.app/universe) (`@preview/…`) are 
 
 Each document can have its own Git repository. Local features (saving, comparing and restoring versions, branches) work without Git installed. To push and pull, Sqritto uses the installed Git command line and therefore its credentials.
 
+## Updates
+
+The local app looks for a new version at start and then once a day. It only asks the GitHub API for the latest release of `jasal82/sqritto`; no document data is sent. A new version is announced in the library and can be installed under Settings → Updates; the automatic check can be switched off there, and a version can be skipped.
+
+An update downloads the package for the current platform, verifies its SHA-256 checksum (published by GitHub for every release file, otherwise from `SHA256SUMS.txt`) and then
+
+- on Windows installations made with the setup, runs the new setup silently, which updates the installation and starts Sqritto again (`/RELAUNCH=1`),
+- for the portable Windows ZIP and the macOS and Linux archives, replaces the program file and the license files next to the running program (the old files are renamed to `*.old` first and removed on the next start) and starts the new version.
+
+The new version takes over port and access token of the old one, so an open browser tab stays signed in and simply reloads; the app window closes and the new version opens its own. Development builds, programs not started from a Sqritto package (no `LICENSE.txt` next to them) and read-only program folders are not updated automatically – Sqritto then links to the release on GitHub. In server mode (`sqritto serve`) there are no automatic updates. For tests, `SQRITTO_UPDATE_URL` points the check at a local copy of the GitHub API response.
+
 ## Languages
 
 Sqritto is available in English and German. The interface follows the system language and can be changed under Settings → Language; the environment variable `SQRITTO_LANGUAGE` (`de`, `en`, `system`) takes precedence, e.g. for CI or screenshots. Everything that ends up in a document (labels in the PDF and the HTML5 site, elements, dates) follows the document language `lang` in `sqritto.toml` instead; languages other than German get English labels.
@@ -199,7 +210,7 @@ Apart from Rust and Node.js, the Linux build only needs a C compiler, `make` and
 
 `.github/workflows/build.yml` runs on pushes, pull requests and manually. On Windows x64, Linux x64 (Ubuntu 24.04) and macOS ARM64 it runs the type check, the translation check, the frontend build, the engine tests, the Rust tests of all targets and the release build. The Rust tests run with `--release` so that they share their compiled dependencies (above all Typst) with the package build that follows; a Rust cache per platform keeps them between runs. In CI the build scripts reuse the already built frontend via `SQRITTO_FRONTEND_READY=1`.
 
-Afterwards the finished program is checked with the smoke test on every platform. On Windows this happens with the installed program: the test installs silently into a temporary folder, checks version and files, runs the smoke test, installs an update on top and uninstalls again. The packages (Windows installer, Windows ZIP, Linux and macOS archives) can be downloaded as workflow artifacts from every successful run.
+Afterwards the finished program is checked with the smoke test on every platform. On Windows this happens with the installed program: the test installs silently into a temporary folder, checks version and files, runs the smoke test, installs an update on top, checks that the setup restarts Sqritto after a self-update (`/RELAUNCH`, with port and token taken over) and uninstalls again. The packages (Windows installer, Windows ZIP, Linux and macOS archives) can be downloaded as workflow artifacts from every successful run.
 
 To release:
 

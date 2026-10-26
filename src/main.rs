@@ -26,6 +26,7 @@ mod proc;
 mod project;
 mod server;
 mod templates;
+mod update;
 mod world;
 
 use std::path::PathBuf;
@@ -47,7 +48,7 @@ struct Cli {
     #[arg(long, default_value_t = 4517)]
     port: u16,
     /// Kein Fenster/Browser öffnen.
-    #[arg(long)]
+    #[arg(long, env = "SQRITTO_NO_OPEN")]
     no_open: bool,
     /// Im normalen Browser-Tab statt im App-Fenster öffnen.
     #[arg(long)]
@@ -198,6 +199,8 @@ fn init_logging(log_file: Option<PathBuf>) {
 }
 
 fn main() -> Result<()> {
+    // Vor allem anderen: entfernt die Angaben aus der Umgebung, solange kein weiterer Thread läuft.
+    let restart = update::take_restart();
     let has_console = attach_console();
     let config = config_dir();
     i18n::init_from_settings(&config);
@@ -223,6 +226,7 @@ fn main() -> Result<()> {
                     cache_dir: cache,
                     focus: None,
                     idle_exit: None,
+                    wait_for_port: false,
                 };
                 let (listener, addr) = server::bind(&cfg).await?;
                 let version = env!("CARGO_PKG_VERSION");
@@ -250,21 +254,28 @@ fn main() -> Result<()> {
                 server::serve(cfg, listener).await
             })
         }
-        None => run_local(cli, workspace, config, cache),
+        None => run_local(cli, workspace, config, cache, restart),
     }
 }
 
 /// Lokale App: Server im Hintergrund, Oberfläche im nativen Fenster (oder,
-/// falls nicht verfügbar, als App-Fenster im Browser).
-fn run_local(cli: Cli, workspace: PathBuf, config: PathBuf, cache: PathBuf) -> Result<()> {
+/// falls nicht verfügbar, als App-Fenster im Browser). `restart`: gestartet
+/// von der vorigen Version nach einem Update.
+fn run_local(cli: Cli, workspace: PathBuf, config: PathBuf, cache: PathBuf, restart: Option<update::Restart>) -> Result<()> {
     std::fs::create_dir_all(&config)?;
-    // Läuft Sqritto schon? Dann nur dessen Fenster nach vorne holen.
-    if !cli.no_open && instance::activate_existing(&config) {
+    // Läuft Sqritto schon? Dann nur dessen Fenster nach vorne holen. Nach einem
+    // Update ist die laufende Instanz die alte Version, die sich gerade beendet.
+    if restart.is_none() && !cli.no_open && instance::activate_existing(&config) {
         return Ok(());
     }
     fonts::preload();
-    // Für Entwicklung/Tests kann das Token fest vorgegeben werden.
-    let token = cli.token.clone().filter(|t| !t.is_empty()).unwrap_or_else(random_token);
+    // Nach einem Update dieselbe Adresse und dasselbe Token wie zuvor: Offene
+    // Browser-Tabs bleiben angemeldet, gespeicherte Ansichten (localStorage)
+    // gehören zur Adresse. Für Entwicklung/Tests kann das Token fest vorgegeben werden.
+    let token = match &restart {
+        Some(r) => r.token.clone(),
+        None => cli.token.clone().filter(|t| !t.is_empty()).unwrap_or_else(random_token),
+    };
     let library = Arc::new(library::Library::open(workspace, config.clone(), false)?);
     let rt = tokio::runtime::Runtime::new()?;
 
@@ -283,18 +294,23 @@ fn run_local(cli: Cli, workspace: PathBuf, config: PathBuf, cache: PathBuf) -> R
         library,
         local: true,
         host: "127.0.0.1".into(),
-        port: cli.port,
+        port: restart.as_ref().map_or(cli.port, |r| r.port),
         token: Some(token.clone()),
         cache_dir: cache.clone(),
         focus,
         idle_exit: Some(server::IdleExit {
             armed: idle_armed.clone(),
             on_exit: Arc::new(move || instance::unregister(&config_exit)),
+            // Nach einem Update verbindet sich die offene Seite neu; bleibt sie aus, endet die App.
+            reconnect: restart.is_some(),
         }),
+        wait_for_port: restart.is_some(),
     };
     let (listener, addr) = rt.block_on(server::bind(&cfg))?;
     let base = format!("http://127.0.0.1:{}", addr.port());
     tracing::info!("Sqritto läuft unter {base}");
+    update::enable(addr.port(), &token, &cache, &config);
+    update::spawn_checks(&rt);
 
     // Reiner Server ohne Fenster (Entwicklung): nicht als App-Instanz
     // anmelden, sonst würde ein normaler Start nur diesen Server „aktivieren“.
@@ -312,6 +328,8 @@ fn run_local(cli: Cli, workspace: PathBuf, config: PathBuf, cache: PathBuf) -> R
 
     #[cfg(any(windows, target_os = "macos"))]
     if let Some(desktop) = desktop {
+        let quit = desktop.quit_handle();
+        update::set_quit_handler(move || quit());
         rt.spawn(server::serve(cfg, listener));
         let dark = prefers_dark(&config);
         let config_for_exit = config.clone();
@@ -337,8 +355,16 @@ fn run_local(cli: Cli, workspace: PathBuf, config: PathBuf, cache: PathBuf) -> R
     let url = format!("{base}/?token={token}");
     let reopen = url.clone();
     cfg.focus = Some(Arc::new(move || open_app_window(&reopen, false)));
+    let config_quit = config.clone();
+    update::set_quit_handler(move || {
+        instance::unregister(&config_quit);
+        std::process::exit(0);
+    });
     idle_armed.store(true, std::sync::atomic::Ordering::SeqCst);
-    open_app_window(&url, cli.browser);
+    // Nach einem Update lädt sich die offene Seite selbst neu – kein zweites Fenster.
+    if restart.is_none() {
+        open_app_window(&url, cli.browser);
+    }
     let result = rt.block_on(server::serve(cfg, listener));
     instance::unregister(&config);
     result

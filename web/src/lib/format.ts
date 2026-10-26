@@ -21,6 +21,10 @@ export function dateTime(ms: number): string {
   return dtf.format(new Date(ms));
 }
 
+export function date(ms: number): string {
+  return df.format(new Date(ms));
+}
+
 export function fileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${nf.format(bytes / 1024)} KB`;
