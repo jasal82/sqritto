@@ -11,7 +11,7 @@ import type {
   PageOutput,
   SearchSection,
 } from './types';
-import { buildNodes, buildTags, functions, type PageContext } from './schema';
+import { buildNodes, buildTags, functions, placeInlineTags, type PageContext } from './schema';
 import { LinkResolver } from './links';
 import { renderTopLevel, tsStr, type TypstCtx } from './typst';
 import { renderHtml, setEmitLines, type HostApi, type HtmlCtx } from './html';
@@ -86,12 +86,19 @@ export function buildDocument(input: BuildInput): BuildOutput {
   const tags = buildTags(componentList);
   const preview = !!input.preview;
   const usedComponents = new Set<string>();
+  // Inline-Elemente, die allein in einer Zeile stehen, in den Textfluss holen.
+  const inlineTags = new Set(componentList.filter((c) => c.inline).map((c) => c.name));
+  const parse = (source: string, file: string): Node => {
+    const ast = Markdoc.parse(source, { file } as any);
+    placeInlineTags(ast, inlineTags);
+    return ast;
+  };
 
   // Partials: unter mehreren Schlüsseln erreichbar (`partials/x.mdoc`, `x.mdoc`).
   const partials: Record<string, Node> = {};
   for (const [p, src] of Object.entries(input.partials ?? {})) {
     try {
-      const ast = Markdoc.parse(src, { file: p } as any);
+      const ast = parse(src, p);
       const rel = p.replace(/^content\//, '');
       partials[p] = ast;
       partials[rel] = ast;
@@ -118,7 +125,7 @@ export function buildDocument(input: BuildInput): BuildOutput {
   for (const p of infos) {
     let ast: Node;
     try {
-      ast = Markdoc.parse(p.source, { file: p.path } as any);
+      ast = parse(p.source, p.path);
     } catch (e) {
       diagnostics.push({ path: p.path, level: 'error', message: ui(`Datei konnte nicht gelesen werden: ${String(e)}`, `Could not read file: ${String(e)}`), source: 'engine' });
       continue;
@@ -358,6 +365,18 @@ const MARKDOC_ERRORS: [RegExp, string, string][] = [
     'Attribute `$1` must be one of $2 (got “$3”).',
   ],
   [/^Attribute '(.+)' must be type of '(.+)'$/, 'Attribut `$1` muss vom Typ $2 sein', 'Attribute `$1` must be of type $2'],
+  // Platzierung: Inline-Elemente in eigener Zeile werden vorher in den Textfluss
+  // geholt (placeInlineTags); übrig bleiben echte Fehlplatzierungen.
+  [
+    /^'(.+)' tag should be block$/,
+    '`$1` ist ein Block-Element und kann nicht im Fließtext stehen. Schreibe es in eine eigene Zeile mit Leerzeilen davor und danach.',
+    '`$1` is a block element and cannot be used within running text. Put it on its own line with blank lines before and after.',
+  ],
+  [
+    /^'(.+)' tag should be inline$/,
+    '`$1` ist ein Inline-Element und kann nur Text enthalten, keine Listen, Tabellen oder anderen Blöcke.',
+    '`$1` is an inline element and can only contain text, not lists, tables or other blocks.',
+  ],
 ];
 
 function translateMarkdocError(msg: string): string {

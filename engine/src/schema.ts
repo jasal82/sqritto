@@ -217,6 +217,100 @@ export function buildTags(components: ComponentDef[]): Record<string, Schema> {
   return tags;
 }
 
+// ---------------------------------------------------------------------------
+// Inline-Elemente in eigener Zeile
+// ---------------------------------------------------------------------------
+
+/** Eltern, in denen Inline-Inhalt ohne Absatz steht (enge Listen, Tabellenzellen). */
+const BARE_FLOW_PARENTS = new Set(['item', 'td', 'th']);
+
+/**
+ * Markdoc liest einen Tag, der allein in einer Zeile steht, als Block
+ * (`node.inline === false`). Für Inline-Elemente (`kbd`, `badge` …) ergäbe das
+ * die Meldung „should be inline“, obwohl die Schreibweise naheliegt. Solche
+ * Elemente werden hier in den Textfluss geholt: Sie bilden einen Absatz, der nur
+ * dieses Element enthält, oder werden an einen direkt angrenzenden Absatz (ohne
+ * Leerzeile dazwischen) angehängt. Steht der Inhalt eines Elements in eigenen
+ * Zeilen, wird er als Inline-Inhalt übernommen. Enthält das Element Listen,
+ * Tabellen o. Ä., bleibt es unverändert und wird bei der Prüfung gemeldet.
+ */
+export function placeInlineTags(node: Node, inlineTags: ReadonlySet<string>): void {
+  if (!inlineTags.size) return;
+  const out: Node[] = [];
+  // Zuletzt erzeugter oder erweiterter Absatz mit einem solchen Element.
+  let lifted: Node | undefined;
+  for (const child of node.children) {
+    placeInlineTags(child, inlineTags);
+    const prev = out[out.length - 1];
+    if (child.type === 'tag' && !child.inline && child.tag && inlineTags.has(child.tag)) {
+      const content = inlineContent(child);
+      if (content) {
+        child.children = content;
+        child.inline = true;
+        const target = prev && touches(prev, child) ? flowOf(prev) : undefined;
+        if (target) {
+          target.children.push(flowNode('softbreak', child), child);
+          extendLines(prev, child);
+          lifted = prev;
+        } else {
+          const bare = BARE_FLOW_PARENTS.has(node.type) && !node.children.some((c) => c.type === 'paragraph');
+          const flow = flowNode('inline', child, [child]);
+          lifted = bare ? flow : flowNode('paragraph', child, [flow]);
+          out.push(lifted);
+        }
+        continue;
+      }
+    }
+    // Text direkt unter einem solchen Element gehört zum selben Absatz.
+    const next = flowOf(child);
+    if (prev && prev === lifted && next && touches(prev, child)) {
+      flowOf(prev)!.children.push(flowNode('softbreak', child), ...next.children);
+      extendLines(prev, child);
+      continue;
+    }
+    out.push(child);
+  }
+  node.children = out;
+}
+
+/** Inline-Inhalt eines Absatzes bzw. Inline-Knotens. */
+function flowOf(node: Node): Node | undefined {
+  if (node.type === 'inline') return node;
+  if (node.type === 'paragraph' && node.children.length === 1 && node.children[0].type === 'inline') return node.children[0];
+  return undefined;
+}
+
+/** Kinder eines Elements als Inline-Inhalt; `null`, wenn Blöcke wie Listen enthalten sind. */
+function inlineContent(tag: Node): Node[] | null {
+  const out: Node[] = [];
+  for (const c of tag.children) {
+    const flow = c.type === 'paragraph' ? flowOf(c) : undefined;
+    if (!flow) return null;
+    // Mehrere Absätze bleiben als Zeilenumbruch erkennbar.
+    if (out.length) out.push(flowNode('hardbreak', c));
+    out.push(...flow.children);
+  }
+  return out;
+}
+
+/** Endet `a` in der Zeile, in der `b` beginnt (keine Leerzeile dazwischen)? */
+function touches(a: Node, b: Node): boolean {
+  return a.lines.length > 0 && b.lines.length > 0 && a.lines[a.lines.length - 1] === b.lines[0];
+}
+
+function extendLines(target: Node, by: Node) {
+  const end = by.lines[by.lines.length - 1];
+  for (const n of [target, flowOf(target)]) if (n && n.lines.length) n.lines = [n.lines[0], end];
+}
+
+function flowNode(type: 'paragraph' | 'inline' | 'softbreak' | 'hardbreak', at: Node, children: Node[] = []): Node {
+  const n = new Markdoc.Ast.Node(type, {}, children);
+  n.lines = [at.lines[0], at.lines[at.lines.length - 1]].filter((l) => l !== undefined);
+  n.location = at.location;
+  n.inline = type === 'softbreak' || type === 'hardbreak';
+  return n;
+}
+
 export const functions: Config['functions'] = {
   upper: {
     transform(params) {

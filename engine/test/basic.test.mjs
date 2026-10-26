@@ -39,6 +39,53 @@ test('komponenten und github-hinweise', () => {
   has(out.pages[0].html, 'ts-callout--tip');
 });
 
+test('inline-elemente allein in einer zeile', () => {
+  // Eingebautes Element (wie assets/components/kbd) und eigenes Inline-Element mit Inhalt
+  const kbd = {
+    name: 'kbd',
+    inline: true,
+    selfClosing: true,
+    attributes: { keys: { type: 'String', required: true } },
+    html: '<kbd class="ts-keys">{{keys}}</kbd>',
+  };
+  const chip = { name: 'chip', inline: true, attributes: {}, source: 'local', html: '<span class="chip">{{{children}}}</span>' };
+  const run = (source, preview = false) => build([{ path: 'content/a.mdoc', source }], { components: [callout, kbd, chip], preview });
+
+  // Allein in einer Zeile: ein Absatz mit dem Element, keine Meldung
+  const lone = run('Hier geht es weiter.\n\n{% kbd keys="Strg+S" /%}\n\nDas ist inline.\n\n{% chip %}Neu{% /chip %}\n\n{% chip %}\nAuch neu\n{% /chip %}\n');
+  assert.deepEqual(lone.diagnostics, []);
+  has(lone.pages[0].html, '<p>Hier geht es weiter.</p><p><kbd class="ts-keys">Strg+S</kbd></p><p>Das ist inline.</p>');
+  has(lone.pages[0].html, '<p><span class="chip">Neu</span></p>');
+  has(lone.pages[0].html, '<p><span class="chip">Auch neu</span></p>');
+  has(lone.typst, '\n\n#ts-kbd(keys: "Strg+S");\n\n');
+  has(lone.typst, '\n\n#ts-chip()[Auch neu];\n\n');
+
+  // Ohne Leerzeile gehört das Element zum umgebenden Absatz
+  const flow = run('Zum Speichern\n{% kbd keys="Strg+S" /%}\ndrücken.\n\n{% kbd keys="A" /%}\n{% kbd keys="B" /%}\n');
+  assert.deepEqual(flow.diagnostics, []);
+  has(flow.pages[0].html, '<p>Zum Speichern <kbd class="ts-keys">Strg+S</kbd> drücken.</p>');
+  has(flow.typst, 'Zum Speichern #ts-kbd(keys: "Strg+S"); drücken.');
+  has(flow.typst, '#ts-kbd(keys: "A"); #ts-kbd(keys: "B");');
+
+  // In Listenpunkten, Zitaten und Block-Elementen
+  const nested = run('- {% kbd keys="X" /%}\n- zwei\n\n> {% chip %}Zitat{% /chip %}\n\n{% callout %}\n{% kbd keys="Y" /%}\n{% /callout %}\n');
+  assert.deepEqual(nested.diagnostics, []);
+  has(nested.pages[0].html, '<li><kbd class="ts-keys">X</kbd></li>');
+  has(nested.typst, '#list(tight: true,');
+  has(nested.pages[0].html, '<blockquote><p><span class="chip">Zitat</span></p></blockquote>');
+  has(nested.pages[0].html, '<div class="ts-callout ts-callout--note"><p><kbd class="ts-keys">Y</kbd></p></div>');
+
+  // Echte Fehlplatzierungen werden weiterhin verständlich gemeldet
+  const wrong = run('Text {% callout %}x{% /callout %} mehr.\n\n{% chip %}\n- eins\n- zwei\n{% /chip %}\n');
+  assert.deepEqual(
+    wrong.diagnostics.map((d) => [d.line, d.level, d.message]),
+    [
+      [1, 'error', '`callout` ist ein Block-Element und kann nicht im Fließtext stehen. Schreibe es in eine eigene Zeile mit Leerzeilen davor und danach.'],
+      [3, 'error', '`chip` ist ein Inline-Element und kann nur Text enthalten, keine Listen, Tabellen oder anderen Blöcke.'],
+    ],
+  );
+});
+
 test('links zwischen seiten und code', () => {
   const out = build([
     { path: 'content/index.mdoc', source: '# Start\n\nSiehe [Installation](install.mdoc#voraussetzungen) und [kaputt](nope.mdoc).\n\n```rust {% title="main.rs" %}\nfn main() {}\n```\n' },
